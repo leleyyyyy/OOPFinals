@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/registerpage", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/register", "/css/**", "/js/**").permitAll() // Allow access to these pages
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(form -> form
@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .permitAll() // Allow everyone to see the login page
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/registerpage") // Redirect to register page after logout
+                        .logoutSuccessUrl("/register") // Redirect to register page after logout
                         .permitAll() // Allow everyone to log out
                 );
 
