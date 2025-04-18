@@ -30,4 +30,8 @@ public class UserService {
         userRepository.save(user);
         return "success";
     }
+
+    public User authenticate(String username, String password) {
+        return null;
+    }
 }

@@ -1,19 +1,24 @@
 package com.CareNet.CN.controller;
 
+import com.CareNet.CN.model.Role;
 import com.CareNet.CN.model.User;
-import com.CareNet.CN.service.UserService;
+import com.CareNet.CN.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RegistrationController {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository; // Inject UserRepository
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inject PasswordEncoder
 
     // Redirect root URL to the registration page
     @GetMapping("/")
@@ -28,17 +33,20 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser (User user, BindingResult result, Model model) {
-        String registrationResult = userService.registerUser (user, result); // Call the service method
-
-        if (result.hasErrors()) {
-            // If there are errors, return to the registration page with the user object
-            model.addAttribute("user", user);
-            return "registerpage"; // Return to the registration page
+    public String registerUser (@ModelAttribute User user) {
+        // Check if the username or email already exists
+        if (userRepository.existsByUsername(user.getUsername()) || userRepository.existsByEmail(user.getEmail())) {
+            return "redirect:/register?error=true"; // Redirect to registration page with error
         }
 
-        // Redirect to the login page after successful registration
-        return "redirect:/login"; // Redirect to the login page after registration
+        // Encode the password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Set the default role for new users (e.g., PATIENT)
+        user.setRole(Role.PATIENT); // Set the role to PATIENT or DOCTOR as needed
+
+        userRepository.save(user); // Save the user to the database
+        return "redirect:/login"; // Redirect to login page after successful registration
     }
 
     @GetMapping("/login")
