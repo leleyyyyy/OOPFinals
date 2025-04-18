@@ -10,66 +10,46 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Setter
+@Getter
 @Data
 @Entity
-@Table(name = "Users")
+@Table(name = "register_record")
 public class User implements UserDetails {
-    @Setter
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
-    @Setter
     @Column(nullable = false, unique = true, length = 30)
     private String username;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 25)
     private String middleName;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 10)
     private String gender;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 20)
     private String birthday;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 11)
     private String phoneNumber;
 
-    @Getter
-    @Setter
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 64)
     private String password;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 25)
     private String firstName;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 25)
     private String lastName;
 
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING) // Store the enum as a string in the database
     @Column(nullable = false)
-    private Role role; // Use the Role enum
+    private Role role = Role.PATIENT; // Set default role to PATIENT
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

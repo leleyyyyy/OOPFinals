@@ -6,6 +6,7 @@ import com.CareNet.CN.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,23 +14,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private UserService userService; // Inject userService
 
-    @PostMapping("/login")
+    @PostMapping("/login") // Ensure this is the correct mapping for login
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = userService.authenticateUser(username, password);
+        User user = userService.authenticateUser (username, password);
 
         if (user != null) {
             // Redirect based on user role
             if (user.getRole() == Role.DOCTOR) {
-                return "redirect:/doctor/home"; // Doctor's homepage
+                return "redirect:/doctorHome"; // Example for doctor redirection
             } else if (user.getRole() == Role.PATIENT) {
-                return "redirect:/patient/home"; // Patient's homepage
+                return "redirect:/patientHome"; // Example for patient redirection
             }
-        } else {
-            model.addAttribute("error", "Invalid credentials");
-            return "login"; // Return to login page with error
         }
-        return username;
+
+        model.addAttribute("error", "Invalid credentials"); // Add an error attribute
+        return "login"; // Return login view
     }
 }
