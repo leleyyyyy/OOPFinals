@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/patient")
 public class PatientController {
 
-    @GetMapping("/home")
+    @GetMapping("/patient/home")
     public String patientHome() {
         return "patientHome"; // Return the patient's homepage view
     }

@@ -31,7 +31,7 @@ public class UserService {
         return "success";
     }
 
-    public User authenticate(String username, String password) {
+    public User authenticateUser(String username, String password) {
         return null;
     }
 }

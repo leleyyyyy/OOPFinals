@@ -17,7 +17,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = userService.authenticate(username, password);
+        User user = userService.authenticateUser(username, password);
 
         if (user != null) {
             // Redirect based on user role

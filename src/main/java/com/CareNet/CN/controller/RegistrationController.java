@@ -2,29 +2,19 @@ package com.CareNet.CN.controller;
 
 import com.CareNet.CN.model.Role;
 import com.CareNet.CN.model.User;
-import com.CareNet.CN.repository.UserRepository;
+import com.CareNet.CN.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegistrationController {
 
     @Autowired
-    private UserRepository userRepository; // Inject UserRepository
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; // Inject PasswordEncoder
-
-    // Redirect root URL to the registration page
-    @GetMapping("/")
-    public String redirectToRegistration() {
-        return "redirect:/register"; // Redirect to the registration page
-    }
+    private UserService userService; // Declare and inject userService
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -32,25 +22,25 @@ public class RegistrationController {
         return "registerpage"; // Return the registration page
     }
 
-    @PostMapping("/register")
-    public String registerUser (@ModelAttribute User user) {
-        // Check if the username or email already exists
-        if (userRepository.existsByUsername(user.getUsername()) || userRepository.existsByEmail(user.getEmail())) {
-            return "redirect:/register?error=true"; // Redirect to registration page with error
+    @PostMapping("/Login")
+    public String loginUser(@RequestParam String username, @RequestParam String password, Model model) {
+        User user = userService.authenticateUser(username, password);
+
+        if (user != null) {
+            // Use getRoleId() to get the ordinal value
+            if (user.getRoleId() == Role.DOCTOR.getId()) {
+                return "redirect:/doctorHome"; // Example for doctor redirection
+            } else if (user.getRoleId() == Role.PATIENT.getId()) {
+                return "redirect:/patientHome"; // Example for patient redirection
+            }
         }
 
-        // Encode the password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // Set the default role for new users (e.g., PATIENT)
-        user.setRole(Role.PATIENT); // Set the role to PATIENT or DOCTOR as needed
-
-        userRepository.save(user); // Save the user to the database
-        return "redirect:/login"; // Redirect to login page after successful registration
+        model.addAttribute("error", "Invalid credentials"); // Add an error attribute
+        return "Login"; // Return login view
     }
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login"; // Return the login page
+        return "Login"; // Return the login page
     }
 }

@@ -21,7 +21,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/register", "/css/**", "/js/**").permitAll() // Allow access to these pages
+                        .requestMatchers("/", "/register", "/login", "/css/**", "/js/**").permitAll() // Allow access to these pages
+                        .requestMatchers("/doctor/home").hasRole("DOCTOR") // Doctor access
+                        .requestMatchers("/patient/home").hasRole("PATIENT") // Patient access
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(form -> form

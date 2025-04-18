@@ -12,7 +12,7 @@ import java.util.Collections;
 
 @Data
 @Entity
-@Table(name = "tenants")
+@Table(name = "Users")
 public class User implements UserDetails {
     @Setter
     @Getter
@@ -94,5 +94,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getRoleId() { // Make sure the return type is int and returns the ordinal of role
+        return this.role.ordinal();
     }
 }
