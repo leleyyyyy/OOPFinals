@@ -1,6 +1,7 @@
 package com.CareNet.CN.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/patient")
 public class PatientController {
 
-    @GetMapping("/patient/home")
-    public String patientHome() {
-        return "patientHome"; // Return the patient's homepage view
+    @GetMapping("/patientHome")
+    public String patientHome(Model model) {
+        // Logic to send patient data to the view
+        return "patientHome"; // Returns patient home template
     }
 }

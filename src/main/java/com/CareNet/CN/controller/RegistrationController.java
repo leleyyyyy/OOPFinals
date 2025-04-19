@@ -28,7 +28,7 @@ public class RegistrationController {
         if ("success".equals(registrationResult)) {
             return "redirect:/login"; // Redirect to login page after successful registration
         }
-        return "register"; // Return to registration page if there are errors
+        return "registerpage"; // Return to registration page if there are errors
     }
 
     @GetMapping("/login")
