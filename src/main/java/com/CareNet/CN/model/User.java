@@ -24,36 +24,24 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false, length = 25)
-    private String middleName;
-
-    @Column(nullable = false, length = 10)
-    private String gender;
-
-    @Column(nullable = false, length = 20)
-    private String birthday;
-
-    @Column(nullable = false, length = 11)
-    private String phoneNumber;
-
-    @Column(nullable = false, unique = true, length = 50)
-    private String email;
-
-    @Column(nullable = false, length = 64)
-    private String password;
-
-    @Column(nullable = false, length = 25)
     private String firstName;
 
     @Column(nullable = false, length = 25)
     private String lastName;
 
-    @Enumerated(EnumType.STRING) // Store the enum as a string in the database
+    @Column(nullable = false, length = 64)
+    private String password;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String email;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.PATIENT; // Set default role to PATIENT
+    private Role role = Role.PATIENT; // Default role
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> role.name()); // Return the role name as authority
+        return Collections.singleton(() -> role.name());
     }
 
     @Override
@@ -76,7 +64,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public int getRoleId() { // Make sure the return type is int and returns the ordinal of role
-        return this.role.ordinal();
+    public String getEmail() {
+        return null;
     }
 }

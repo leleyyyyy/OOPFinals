@@ -5,8 +5,10 @@ import com.CareNet.CN.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // Import the Transactional annotation
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -15,7 +17,22 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Inject PasswordEncoder
+    private PasswordEncoder passwordEncoder;
+
+    public User authenticateUser (String username, String password) {
+        Optional<User> optionalUser  = userRepository.findByUsername(username); // Get Optional<User>
+        if (optionalUser .isPresent()) {
+            User user = optionalUser .get(); // Get the User object
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return user; // Return user if authentication is successful
+            }
+        }
+        return null; // Return null if authentication fails
+    }
+    @Transactional
+    public void saveUser (User user) {
+        userRepository.save(user); // Save the user to the database
+    }
 
     public String registerUser (User user, BindingResult result) {
         // Check if the username or email already exists
@@ -39,16 +56,4 @@ public class UserService {
         return "success"; // Return success message or view
     }
 
-    @Transactional // Ensure this method runs in a transaction
-    public void saveUser (User user) {
-        userRepository.save(user); // Save the user to the database
-    }
-
-    public User authenticateUser (String username, String password) {
-        User user = userRepository.findByUsername(username); // Fetch user by username
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return user; // Return user if credentials match
-        }
-        return null; // Return null if authentication fails
-    }
 }

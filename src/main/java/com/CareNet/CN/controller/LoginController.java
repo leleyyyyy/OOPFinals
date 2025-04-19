@@ -14,22 +14,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     @Autowired
-    private UserService userService; // Inject userService
+    private UserService userService;
 
-    @PostMapping("/login") // Ensure this is the correct mapping for login
+    @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
         User user = userService.authenticateUser (username, password);
-
         if (user != null) {
             // Redirect based on user role
             if (user.getRole() == Role.DOCTOR) {
-                return "redirect:/doctor/doctorHome"; // Example for doctor redirection
+                return "redirect:/doctor/doctorHome"; // Redirect to doctor home
             } else if (user.getRole() == Role.PATIENT) {
-                return "redirect:/patient/patientHome"; // Example for patient redirection
+                return "redirect:/patient/patientHome"; // Redirect to patient home
             }
         }
-
         model.addAttribute("error", "Invalid credentials"); // Add an error attribute
-        return "login"; // Return login view
+        return "login"; // Return to login view
     }
 }
