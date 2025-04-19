@@ -23,9 +23,9 @@ public class LoginController {
         if (user != null) {
             // Redirect based on user role
             if (user.getRole() == Role.DOCTOR) {
-                return "redirect:/doctorHome"; // Example for doctor redirection
+                return "redirect:/doctor/doctorHome"; // Example for doctor redirection
             } else if (user.getRole() == Role.PATIENT) {
-                return "redirect:/patientHome"; // Example for patient redirection
+                return "redirect:/patient/patientHome"; // Example for patient redirection
             }
         }
 
