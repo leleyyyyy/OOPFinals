@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean // Hashes the password for security
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -21,13 +21,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/register", "/css/**", "/js/**").permitAll() // Allow access to these pages
+                        .requestMatchers("/", "/register","/process_register","/process_login", "/css/**", "/js/**").permitAll() // Allow access to these pages
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Custom login page
-                        .defaultSuccessUrl("/success", true) // Redirect to success page after login
-                        .failureUrl("/login?error=true") // Redirect to login page on failure
                         .permitAll() // Allow everyone to see the login page
                 )
                 .logout(logout -> logout

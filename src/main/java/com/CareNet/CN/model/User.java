@@ -12,8 +12,9 @@ import java.util.Collections;
 
 @Data
 @Entity
-@Table(name = "tenants")
-public class User implements UserDetails {
+@Table(name = "records")
+
+public class User {
     @Setter
     @Getter
     @Id
@@ -67,32 +68,9 @@ public class User implements UserDetails {
 
     @Getter
     @Setter
-    @Enumerated(EnumType.STRING) // Store the enum as a string in the database
     @Column(nullable = false)
-    private Role role; // Use the Role enum
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> role.name()); // Return the role name as authority
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    private String role; // Use the Role enum
 }
+
+
+
