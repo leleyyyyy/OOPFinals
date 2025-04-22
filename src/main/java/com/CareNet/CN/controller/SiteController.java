@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SiteController {
@@ -74,20 +75,32 @@ public class SiteController {
         return "addAssessment"; // Return the name of the Thymeleaf template
     }
 
+    @Autowired
+    private PatientAssessmentRepository patientAssessmentRepository;
+    @Autowired
+    private UserRepository userRepository;
     // New method to process the add assessment form submission
     @PostMapping("/process_addAssessment")
-    public String processAddAssessment(@ModelAttribute PatientAssessment assessment, Model model) {
-        // Find the user based on the patient ID
-        User user = repo.findById(assessment.getUser ().getId()).orElse(null);
-
-        if (user != null) {
-            assessment.setUser (user); // Set the user for the assessment
-            assessmentRepo.save(assessment); // Save the new assessment to the database
-            return "redirect:/addAssessment"; // Redirect to the doctor's home page after successful addition
-        } else {
-            model.addAttribute("error", "User  not found. Please check the Patient ID.");
-            return "addAssessment"; // Return to the add assessment page with an error
+    public String processAddAssessment(@ModelAttribute("assessment") PatientAssessment assessment, Model model) {
+        // Validate that the username exists in the records table
+        if (assessment.getUsername() == null || assessment.getUsername().isEmpty()) {
+            model.addAttribute("error", "Username is required.");
+            return "addAssessment"; // Return to the form with an error
         }
+
+        // Find the user by username
+        User user = userRepository.findByUsername(assessment.getUsername());
+        if (user == null) {
+            model.addAttribute("error", "User  not found.");
+            return "addAssessment"; // Return to the form with an error
+        }
+
+        // Set the user in the assessment
+        assessment.setUser (user);
+
+        // Save the assessment
+        patientAssessmentRepository.save(assessment);
+        return "redirect:/success"; // Redirect to a success page
     }
 
     // New method to show the doctor's home page
@@ -96,6 +109,19 @@ public class SiteController {
         // You can add any necessary attributes to the model here
         model.addAttribute("assessments", assessmentRepo.findAll()); // Fetch all assessments to display
         return "doctorHome"; // Return the name of the Thymeleaf template
+    }
+
+    @GetMapping("/patientHome")
+    public String showPatientHome(@RequestParam("id") Long userId, Model model) {
+        User user = repo.findById(userId).orElse(null);
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("assessments", assessmentRepo.findAllByUser (user)); // Fetch assessments for the specific user
+            return "patientHome"; // Return the name of the Thymeleaf template
+        } else {
+            model.addAttribute("error", "User  not found.");
+            return "login"; // Redirect to login or an error page
+        }
     }
 
     @PostMapping("/process_login")

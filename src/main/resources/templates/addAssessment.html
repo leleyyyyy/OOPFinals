@@ -2,50 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Add Patient Assessment</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1 {
+        color: #333;
+    }
+    form {
+        margin-top: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    button {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #218838;
+    }
+    .error {
+        color: red;
+        margin-bottom: 15px;
+    }
+  </style>
 </head>
 <body>
 <h1>Add Patient Assessment</h1>
+
+<!-- Display error message if any -->
+<div th:if="${error}" class="error" th:text="${error}"></div>
+
 <form action="#" th:action="@{/process_addAssessment}" method="post" th:object="${assessment}">
   <div>
-    <label for=>User ID:</label>
-    <input type="hidden" th:field="*{user.id}" required />
+    <label for="username">Username:</label>
+    <input type="text" id="username" th:field="*{username}" required />
   </div>
-
-
   <div>
     <label for="age">Age:</label>
     <input type="number" id="age" th:field="*{age}" required />
   </div>
-
   <div>
     <label for="date">Date:</label>
     <input type="date" id="date" th:field="*{date}" required />
   </div>
-
   <div>
     <label for="height">Height (cm):</label>
     <input type="number" step="0.01" id="height" th:field="*{height}" required />
   </div>
-
   <div>
     <label for="weight">Weight (kg):</label>
     <input type="number" step="0.01" id="weight" th:field="*{weight}" required />
   </div>
-
   <div>
-    <label for="symptomsOrNotes">Symptoms or Additional Notes:</label>
+    <label for="notes">Notes:</label>
+    <textarea id="notes" th:field="*{notes}" rows="4" cols="50"></textarea>
+  </div>
+  <div>
+    <label for="symptomsOrNotes">Symptoms or Notes:</label>
     <textarea id="symptomsOrNotes" th:field="*{symptomsOrNotes}" rows="4" cols="50"></textarea>
   </div>
-
   <div>
     <label for="treatmentPlan">Treatment Plan:</label>
     <textarea id="treatmentPlan" th:field="*{treatmentPlan}" rows="4" cols="50"></textarea>
   </div>
-
   <div>
     <button type="submit">Add Assessment</button>
   </div>
 </form>
+
 <a href="/doctorHome">Back to Home</a>
 </body>
 </html>
