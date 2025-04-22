@@ -1,6 +1,8 @@
 package com.CareNet.CN.controller;
 
+import com.CareNet.CN.model.PatientAssessment; // Import the PatientAssessment model
 import com.CareNet.CN.model.User;
+import com.CareNet.CN.repository.PatientAssessmentRepository; // Import the PatientAssessment repository
 import com.CareNet.CN.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,9 @@ public class SiteController {
     private UserRepository repo;
 
     @Autowired
+    private PatientAssessmentRepository assessmentRepo; // Add the PatientAssessment repository
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -25,15 +30,21 @@ public class SiteController {
     }
 
     @GetMapping("/register")
-    public String showSignpp(Model model){
+    public String showSignUp(Model model) {
         model.addAttribute("user", new User());
         return "registerpage";
     }
+
     @GetMapping("/login")
-    public String showLogin(Model model){
+    public String showLogin(Model model) {
         model.addAttribute("user", new User());
         return "login";
+    }
 
+    @GetMapping("/edit")
+    public String showEditPage(Model model) {
+        // You can add any necessary attributes to the model here
+        return "editPage"; // Return the name of the new Thymeleaf template
     }
 
     @PostMapping("/process_register")
@@ -56,26 +67,54 @@ public class SiteController {
         return "login";
     }
 
-    @PostMapping("/process_login")
-    public String processLogin(@ModelAttribute User user, Model model) {
-        // Find the user by username
-        User existingUser = repo.findByUsername(user.getUsername());
+    // New method to show the add assessment page
+    @GetMapping("/addAssessment")
+    public String showAddAssessmentPage(Model model) {
+        model.addAttribute("assessment", new PatientAssessment()); // Create a new PatientAssessment object
+        return "addAssessment"; // Return the name of the Thymeleaf template
+    }
 
-        // Check if the user exists and if the password matches
-        if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            // Successful login
-            if("patient".equalsIgnoreCase(existingUser.getRole())){
-                return "patientHome"; // Redirect to home page or dashboard
-            } else {
-                return "doctorHome";
-            }
+    // New method to process the add assessment form submission
+    @PostMapping("/process_addAssessment")
+    public String processAddAssessment(@ModelAttribute PatientAssessment assessment, Model model) {
+        // Find the user based on the patient ID
+        User user = repo.findById(assessment.getUser ().getId()).orElse(null);
+
+        if (user != null) {
+            assessment.setUser (user); // Set the user for the assessment
+            assessmentRepo.save(assessment); // Save the new assessment to the database
+            return "redirect:/addAssessment"; // Redirect to the doctor's home page after successful addition
         } else {
-            // Failed login
-            model.addAttribute("error", "Invalid email or password.");
-            return "login"; // Return to login form with error
+            model.addAttribute("error", "User  not found. Please check the Patient ID.");
+            return "addAssessment"; // Return to the add assessment page with an error
         }
     }
 
+    // New method to show the doctor's home page
+    @GetMapping("/doctorHome")
+    public String showDoctorHome(Model model) {
+        // You can add any necessary attributes to the model here
+        model.addAttribute("assessments", assessmentRepo.findAll()); // Fetch all assessments to display
+        return "doctorHome"; // Return the name of the Thymeleaf template
+    }
 
+    @PostMapping("/process_login")
+    public String processLogin(@ModelAttribute User user, Model model) {
+        // Find the user by username
+        User existingUser  = repo.findByUsername(user.getUsername());
+
+        // Check if the user exists and if the password matches
+        if (existingUser  != null && passwordEncoder.matches(user.getPassword(), existingUser .getPassword())) {
+            // Successful login
+            if ("patient".equalsIgnoreCase(existingUser .getRole())) {
+                return "patientHome"; // Redirect to patient home page or dashboard
+            } else {
+                return "doctorHome"; // Redirect to doctor home page
+            }
+        } else {
+            // Failed login
+            model.addAttribute("error", "Invalid username or password.");
+            return "login"; // Return to login form with error
+        }
+    }
 }
-
