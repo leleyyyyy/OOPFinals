@@ -13,8 +13,8 @@ import java.util.Collections;
 @Data
 @Entity
 @Table(name = "records")
+public class User implements UserDetails {
 
-public class User {
     @Setter
     @Getter
     @Id
@@ -69,8 +69,40 @@ public class User {
     @Getter
     @Setter
     @Column(nullable = false)
-    private String role; // Use the Role enum
+    private String role; // Role field (e.g., "USER", "ADMIN")
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(() -> "ROLE_" + this.role);
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
-
-
-

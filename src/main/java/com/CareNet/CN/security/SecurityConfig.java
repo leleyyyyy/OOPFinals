@@ -1,39 +1,59 @@
 package com.CareNet.CN.security;
 
+import com.CareNet.CN.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    @Bean // Hashes the password for security
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    private final UserService userService;
+
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
     }
+
+    // Define role constants for clarity and to avoid duplication
+    public static final String ROLE_DOCTOR = "ROLE_DOCTOR";
+    public static final String ROLE_PATIENT = "ROLE_PATIENT";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/register","/process_register","/process_login", "/css/**", "/js/**", "/addAssessment","/process_addAssessment").permitAll() // Allow access to these pages
-                        .requestMatchers("/doctorHome").hasRole("DOCTOR") // Only allow doctors to access the edit page
-                        .anyRequest().authenticated() // All other requests require authentication
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/register", "/process_register", "/login", "/process").permitAll()
+                        .requestMatchers("/doctorHome**").hasRole("DOCTOR")
+                        .requestMatchers("/patientHome**").hasRole("PATIENT")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Custom login page
-                        .permitAll() // Allow everyone to see the login page
+                        .loginPage("/login")
+                        .loginProcessingUrl("/process")
+                        .defaultSuccessUrl("/success", true)
+                        .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/register") // Redirect to register page after logout
-                        .permitAll() // Allow everyone to log out
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/403")
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }

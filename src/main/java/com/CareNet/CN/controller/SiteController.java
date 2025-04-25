@@ -1,33 +1,35 @@
 package com.CareNet.CN.controller;
 
-import com.CareNet.CN.model.PatientAssessment; // Import the PatientAssessment model
+import com.CareNet.CN.model.PatientAssessment;
 import com.CareNet.CN.model.User;
-import com.CareNet.CN.repository.PatientAssessmentRepository; // Import the PatientAssessment repository
+import com.CareNet.CN.repository.PatientAssessmentRepository;
 import com.CareNet.CN.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class SiteController {
 
     @Autowired
-    private UserRepository repo;
+    private UserRepository userRepository;
 
     @Autowired
-    private PatientAssessmentRepository assessmentRepo; // Add the PatientAssessment repository
+    private PatientAssessmentRepository patientAssessmentRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
     public String redirectToHomePage() {
-        return "redirect:/register"; // Redirects to the root URL
+        return "redirect:/register";
     }
 
     @GetMapping("/register")
@@ -37,110 +39,93 @@ public class SiteController {
     }
 
     @GetMapping("/login")
-    public String showLogin(Model model) {
-        model.addAttribute("user", new User());
+    public String loginPage() {
         return "login";
     }
 
-    @GetMapping("/edit")
-    public String showEditPage(Model model) {
-        // You can add any necessary attributes to the model here
-        return "editPage"; // Return the name of the new Thymeleaf template
+    @GetMapping("/patientHome")
+    public String showPatientHome(Model model) {
+        User user = getCurrentUser(); // Get the current authenticated user
+        if (user == null) {
+            return "redirect:/login"; // Redirect if no user is authenticated
+        }
+        model.addAttribute("user", user); // Add the user object to the model
+        return "patientHome"; // Render the patientHome Thymeleaf template
+    }
+    private User getCurrentUser() {
+        // Get the current authenticated user from the SecurityContextHolder
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails != null) {
+            // Fetch the user entity from the database using the username
+            return userRepository.findByUsername(userDetails.getUsername());
+        }
+        return null; // Return null if the user is not authenticated
     }
 
-    @PostMapping("/process_register")
+
+    @GetMapping("/doctorHome")
+    public String doctorHome(Model model) {
+        // Add model attributes if needed
+        return "doctorHome"; // This should match a `patientHome.html` or `.jsp` view
+    }
+
+    // Mapping for the "addAssessment" page
+    @GetMapping("/addAssessment")
+    public String showAddAssessmentForm(Model model) {
+        // Add an empty PatientAssessment object to the model to bind the form inputs
+        model.addAttribute("patientAssessment", new PatientAssessment());
+        return "addAssessment"; // This should correspond to the name of the HTML page (e.g., addAssessment.html)
+    }
+
+    // Mapping to handle the form submission (POST request)
+    @PostMapping("/addAssessment")
+    public String addAssessment(@ModelAttribute PatientAssessment patientAssessment) {
+        // Get the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Assuming username is unique
+        User user = findUserByUsername(username); // You need to implement this method or use a service to fetch the user
+
+        // Set the user on the patient assessment
+        patientAssessment.setUser(user);
+
+        // Save the patient assessment
+        patientAssessmentRepository.save(patientAssessment);
+
+        return "redirect:/doctorHome"; // Redirect to a list of assessments or another page
+    }
+
+    // You need to implement this method to find the User by username (or use a service to fetch the User)
+    private User findUserByUsername(String username) {
+        return userRepository.findByUsername(username); // You need to inject userRepository if you don't already
+    }
+
+        @PostMapping("/process_register")
     public String processRegistration(@ModelAttribute User user, Model model) {
-        // Check if username or email already exists
-        if (repo.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             model.addAttribute("usernameError", "Username is already taken.");
-            return "registerpage"; // Replace with your actual form view name
+            return "registerpage";
         }
 
-        if (repo.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             model.addAttribute("emailError", "Email is already registered.");
             return "registerpage";
         }
 
-        user.setRole("patient");
-        // Encode the password and save
+        user.setRole("ROLE_PATIENT");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        repo.save(user);
-        return "login";
+        userRepository.save(user);
+
+        return "redirect:/login";
     }
 
-    // New method to show the add assessment page
-    @GetMapping("/addAssessment")
-    public String showAddAssessmentPage(Model model) {
-        model.addAttribute("assessment", new PatientAssessment()); // Create a new PatientAssessment object
-        return "addAssessment"; // Return the name of the Thymeleaf template
-    }
-
-    @Autowired
-    private PatientAssessmentRepository patientAssessmentRepository;
-    @Autowired
-    private UserRepository userRepository;
-    // New method to process the add assessment form submission
-    @PostMapping("/process_addAssessment")
-    public String processAddAssessment(@ModelAttribute("assessment") PatientAssessment assessment, Model model) {
-        // Validate that the username exists in the records table
-        if (assessment.getUsername() == null || assessment.getUsername().isEmpty()) {
-            model.addAttribute("error", "Username is required.");
-            return "addAssessment"; // Return to the form with an error
+    @GetMapping("/success")
+    public String redirectBasedOnRole() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DOCTOR"))) {
+            return "redirect:/doctorHome";
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_PATIENT"))) {
+            return "redirect:/patientHome";
         }
-
-        // Find the user by username
-        User user = userRepository.findByUsername(assessment.getUsername());
-        if (user == null) {
-            model.addAttribute("error", "User  not found.");
-            return "addAssessment"; // Return to the form with an error
-        }
-
-        // Set the user in the assessment
-        assessment.setUser (user);
-
-        // Save the assessment
-        patientAssessmentRepository.save(assessment);
-        return "redirect:/success"; // Redirect to a success page
-    }
-
-    // New method to show the doctor's home page
-    @GetMapping("/doctorHome")
-    public String showDoctorHome(Model model) {
-        // You can add any necessary attributes to the model here
-        model.addAttribute("assessments", assessmentRepo.findAll()); // Fetch all assessments to display
-        return "doctorHome"; // Return the name of the Thymeleaf template
-    }
-
-    @GetMapping("/patientHome")
-    public String showPatientHome(@RequestParam("id") Long userId, Model model) {
-        User user = repo.findById(userId).orElse(null);
-        if (user != null) {
-            model.addAttribute("user", user);
-            model.addAttribute("assessments", assessmentRepo.findAllByUser (user)); // Fetch assessments for the specific user
-            return "patientHome"; // Return the name of the Thymeleaf template
-        } else {
-            model.addAttribute("error", "User  not found.");
-            return "login"; // Redirect to login or an error page
-        }
-    }
-
-    @PostMapping("/process_login")
-    public String processLogin(@ModelAttribute User user, Model model) {
-        // Find the user by username
-        User existingUser  = repo.findByUsername(user.getUsername());
-
-        // Check if the user exists and if the password matches
-        if (existingUser  != null && passwordEncoder.matches(user.getPassword(), existingUser .getPassword())) {
-            // Successful login
-            if ("patient".equalsIgnoreCase(existingUser .getRole())) {
-                return "patientHome"; // Redirect to patient home page or dashboard
-            } else {
-                return "doctorHome"; // Redirect to doctor home page
-            }
-        } else {
-            // Failed login
-            model.addAttribute("error", "Invalid username or password.");
-            return "login"; // Return to login form with error
-        }
+        return "redirect:/login";
     }
 }

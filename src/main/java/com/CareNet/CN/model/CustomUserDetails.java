@@ -1,4 +1,4 @@
-package com.CareNet.CN.security;
+package com.CareNet.CN.model;
 
 import com.CareNet.CN.model.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,9 +27,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername(){
-        return user.getEmail();
+        return user.getUsername(); // assuming your User entity has a 'username' field
     }
-
 
     @Override
     public boolean isAccountNonExpired(){
