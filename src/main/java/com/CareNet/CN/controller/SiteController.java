@@ -27,9 +27,20 @@ public class SiteController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/lobby")
+    public String showLobbyPage() {
+        return "lobby";  // This corresponds to your lobby.html page
+    }
+
     @GetMapping("/")
     public String redirectToHomePage() {
-        return "redirect:/register";
+        return "redirect:/lobby";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        // You can add logic for handling session logout if needed
+        return "redirect:/lobby";  // Redirect to the lobby after logout
     }
 
     @GetMapping("/register")
