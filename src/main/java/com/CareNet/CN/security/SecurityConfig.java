@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/process_register", "/login", "/process", "/lobby").permitAll()
                         .requestMatchers("/doctorHome**").hasRole("DOCTOR")
-                        .requestMatchers("/patientHome**").hasRole("PATIENT")
+                        .requestMatchers("/patientHome**","/profile", "/editprofile").hasRole("PATIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

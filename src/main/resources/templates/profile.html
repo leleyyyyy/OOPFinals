@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+</head>
+<body>
+<h1>My Profile</h1>
+
+<div class="profile-pic">
+    <img th:src="${user.imageUrl}" alt="Profile image" width="150" height="150">
+</div>
+
+<div class="info">
+    <p><label>First Name:</label> <span th:text="${user.firstName}"></span></p>
+    <p><label>Middle Name:</label> <span th:text="${user.middleName}"></span></p>
+    <p><label>Last Name:</label> <span th:text="${user.lastName}"></span></p>
+    <p><label>Username:</label> <span th:text="${user.username}"></span></p>
+    <p><label>Email:</label> <span th:text="${user.email}"></span></p>
+    <p><label>Phone:</label> <span th:text="${user.phoneNumber}"></span></p>
+    <p><label>Birthday:</label> <span th:text="${user.birthday}"></span></p>
+    <p><label>Gender:</label> <span th:text="${user.gender}"></span></p>
+    <p><label>Emergency Contact:</label> <span th:text="${user.emergencyContact}"></span></p>
+    <p><label>Blood Type:</label> <span th:text="${user.bloodType}"></span></p>
+</div>
+
+<a href="/profile/edit">Edit Profile</a> |
+<a href="/logout">Logout</a> |
+<a href="/patientHome">Back</a> |
+</body>
+</html>

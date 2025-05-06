@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            max-width: 600px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 16px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .profile-pic {
+            margin-bottom: 20px;
+        }
+        .profile-pic img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Edit Profile</h1>
+
+    <!-- Display profile picture if available -->
+    <div class="profile-pic">
+        <img th:src="${user.imageUrl}" alt="Profile image" width="150" height="150">
+    </div>
+
+    <form th:action="@{/profile/edit}" th:object="${user}" method="post">
+        <label for="firstName">First Name</label>
+        <input type="text" th:field="*{firstName}" id="firstName" required readonly>
+
+        <label for="middleName">Middle Name</label>
+        <input type="text" th:field="*{middleName}" id="middleName" required readonly>
+
+        <label for="lastName">Last Name</label>
+        <input type="text" th:field="*{lastName}" id="lastName" required readonly>
+
+        <label for="username">Username</label>
+        <input type="text" th:field="*{username}" id="username" required readonly>
+
+        <label for="gender">Gender</label>
+        <select th:field="*{gender}" id="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="birthday">Birthday</label>
+        <input type="date" th:field="*{birthday}" id="birthday" required>
+
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" th:field="*{phoneNumber}" id="phoneNumber" required>
+
+        <label for="email">Email</label>
+        <input type="email" th:field="*{email}" id="email" required>
+
+        <label for="emergencyContact">Emergency Contact</label>
+        <input type="text" th:field="*{emergencyContact}" id="emergencyContact">
+
+        <label for="bloodType">Blood Type</label>
+        <input type="text" th:field="*{bloodType}" id="bloodType">
+
+        <label for="imageUrl">Profile Image URL:</label>
+        <input type="url" id="imageUrl" name="imageUrl" th:field="*{imageUrl}">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="/logout">Logout</a>
+</div>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.CareNet.CN.service;
 
 import com.CareNet.CN.model.User;
 import com.CareNet.CN.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,5 +39,9 @@ public class UserService implements UserDetailsService {
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public org.springframework.security.core.userdetails.User findByUsername(String name) {
+        return null;
     }
 }

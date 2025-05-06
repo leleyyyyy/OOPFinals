@@ -69,7 +69,21 @@ public class User implements UserDetails {
     @Getter
     @Setter
     @Column(nullable = false)
-    private String role; // Role field (e.g., "USER", "ADMIN")
+    private String role;
+
+    @Getter
+    @Setter
+    private String emergencyContact;
+
+    @Getter
+    @Setter
+    private String bloodType;
+
+    @Getter
+    @Setter
+    @Column(length = 900)
+    private String imageUrl;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -104,5 +118,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User(){
+        this.imageUrl = "https://i.imgur.com/0000000.png";
     }
 }
