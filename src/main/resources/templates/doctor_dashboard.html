@@ -72,10 +72,10 @@
         <td th:text="${patient.status}"></td>
         <td>
             <div th:if="${patient.status == T(com.CareNet.CN.model.Patient.Status).PENDING}">
-                <form th:action="@{/doctor/patients/{id}/accept(id=${patient.id})}" method="post" style="display:inline;">
+                <form th:action="@{doctor/{id}/accept(id=${patient.id})}" method="post" style="display:inline;">
                     <button type="submit" th:if="${patient.status.name() == 'PENDING'}">Accept</button>
                 </form>
-                <form th:action="@{/doctor/patients/{id}/decline(id=${patient.id})}" method="post" style="display:inline;">
+                <form th:action="@{doctor/{id}/decline(id=${patient.id})}" method="post" style="display:inline;">
                     <button type="submit" th:if="${patient.status.name() == 'PENDING'}">Decline</button>
                 </form>
             </div>
