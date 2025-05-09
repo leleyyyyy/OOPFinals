@@ -6,8 +6,12 @@
 <body>
 <h1>Welcome, <span th:text="${user.username}">User </span></h1>
 
-<a href="/profile">Profile</a> |
-<a href="/assessment">Your Assessments</a> |
-<a href="/logout">Logout</a> |
+<form th:action="@{/appointment/patient}" method="get">
+  <button type="submit" class="button patient-btn">Patient Appointment</button>
+</form>
+
+<a href="/profile">profile</a>
+<a href="/assessment">Your Assessments</a>
+<a href="/logout">Logout</a>
 </body>
 </html>

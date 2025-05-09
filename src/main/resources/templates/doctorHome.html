@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Doctor Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lobby</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 50px;
+    }
+    .button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      margin: 10px;
+    }
+    .doctor-btn {
+      background-color: #2a9d8f;
+      color: white;
+    }
+    .patient-btn {
+      background-color: #e63946;
+      color: white;
+    }
+    .nav-links {
+      margin-top: 30px;
+    }
+    .nav-links a {
+      margin: 0 10px;
+      font-size: 16px;
+      color: #333;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-<h1>Welcome, Doctor!</h1>
-<a href="/logout">Logout</a>
-<a href="/addAssessment">Add New Assessment</a>
+
+<h1>Welcome to the CareNet Health Clinic</h1>
+<p>Make an Appointment?:</p>
+
+<form th:action="@{/register/doctor}" method="get">
+  <button type="submit" class="button doctor-btn">Go To Dashboard</button>
+</form>
+
+<!-- Button to register as a doctor -->
+
+<!-- Additional links -->
+<div class="nav-links">
+  <a th:href="@{/logout}">Logout</a>
+  <a th:href="@{/addAssessment}">Add New Assessment</a>
+</div>
 
 </body>
 </html>
