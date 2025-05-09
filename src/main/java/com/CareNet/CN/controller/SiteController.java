@@ -1,14 +1,13 @@
 package com.CareNet.CN.controller;
 
-import com.CareNet.CN.model.Patient;
+import com.CareNet.CN.model.DoctorAppointment;
 import com.CareNet.CN.model.PatientAssessment;
-import com.CareNet.CN.model.PatientRegistrationDTO;
+import com.CareNet.CN.model.AppointmentSetter;
 import com.CareNet.CN.model.User;
 import com.CareNet.CN.repository.PatientAssessmentRepository;
 import com.CareNet.CN.repository.UserRepository;
 import com.CareNet.CN.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
-import java.security.Principal;
 
 @Controller
 public class SiteController {
@@ -94,15 +91,15 @@ public class SiteController {
 
     @GetMapping("register/doctor")
     public String doctorDashboard(Model model) {
-        List<Patient> patients = patientService.getPendingPatients();
-        model.addAttribute("patients", patients);
+        List<DoctorAppointment> doctorAppointments = patientService.getPendingPatients();
+        model.addAttribute("appointments", doctorAppointments);
         return "doctor_dashboard";
     }
 
     @PostMapping("register/doctor/{id}/accept")
     public String acceptPatient(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         patientService.acceptPatient(id);
-        redirectAttributes.addFlashAttribute("message", "Your request is accepted and the details will be sent through your email.");
+        redirectAttributes.addFlashAttribute("message", "The patient has been accepted.");
         return "redirect:/register/doctor";
     }
 
@@ -115,18 +112,18 @@ public class SiteController {
     }
 
     // Redirect to patient registration page
-    @GetMapping("/appointment/patient")
+    @GetMapping("/appointment/doctorAppointment")
     public String showPatientRegistrationForm(Model model) {
-        model.addAttribute("patientDTO", new PatientRegistrationDTO()); // Make sure this class exists
-        return "patientRegistration";
+        model.addAttribute("patientDTO", new AppointmentSetter()); // Make sure this class exists
+        return "appointment";
     }
 
-    @PostMapping("/patient/appointment")
-    public String registerPatient(@ModelAttribute("patientDTO") PatientRegistrationDTO dto, Model model) {
-        Patient patient = new Patient(dto.getName(), dto.getAppointmentDate().toString());
-        patientService.savePatient(patient);
+    @PostMapping("/doctorAppointment/appointment")
+    public String registerPatient(@ModelAttribute("patientDTO") AppointmentSetter dto, Model model) {
+        DoctorAppointment doctorAppointment = new DoctorAppointment(dto.getName(), dto.getAppointmentDate().toString());
+        patientService.savePatient(doctorAppointment);
         model.addAttribute("success", "Patient registered successfully!,We will reach out for further update");
-        return "patientRegistration";
+        return "appointment";
     }
     // Mapping for the "addAssessment" page
     @GetMapping("/addAssessment")

@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Entity
-@Table(name = "patients")
-public class Patient {
+@Table(name = "appointments")
+public class DoctorAppointment {
     public enum Status {
         PENDING,
         ACCEPTED,
@@ -22,18 +22,18 @@ public class Patient {
     private String name;
 
     @Setter
-    private String email;
+    private String datetime;
 
     @Setter
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    public Patient() {
+    public DoctorAppointment() {
     }
 
-    public Patient(String name, String email) {
+    public DoctorAppointment(String name, String datetime) {
         this.name = name;
-        this.email = email;
+        this.datetime = datetime;
         this.status = Status.PENDING;
     }
 

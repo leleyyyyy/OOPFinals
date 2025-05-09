@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,25 +64,25 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Assuming 'patients' is a list of Patient objects -->
-    <tr th:each="patient : ${patients}">
-        <td th:text="${patient.id}"></td>
-        <td th:text="${patient.name}"></td>
-        <td th:text="${patient.email}"></td>
-        <td th:text="${patient.status}"></td>
+    <!-- Assuming 'doctorAppointments' is a list of Patient objects -->
+    <tr th:each="doctorAppointment : ${appointments}">
+        <td th:text="${doctorAppointment.id}"></td>
+        <td th:text="${doctorAppointment.name}"></td>
+        <td th:text="${doctorAppointment.datetime}"></td>
+        <td th:text="${doctorAppointment.status}"></td>
         <td>
-            <div th:if="${patient.status == T(com.CareNet.CN.model.Patient.Status).PENDING}">
-                <form th:action="@{doctor/{id}/accept(id=${patient.id})}" method="post" style="display:inline;">
-                    <button type="submit" th:if="${patient.status.name() == 'PENDING'}">Accept</button>
+            <div th:if="${doctorAppointment.status == T(com.CareNet.CN.model.DoctorAppointment.Status).PENDING}">
+                <form th:action="@{doctor/{id}/accept(id=${doctorAppointment.id})}" method="post" style="display:inline;">
+                    <button type="submit" th:if="${doctorAppointment.status.name() == 'PENDING'}">Accept</button>
                 </form>
-                <form th:action="@{doctor/{id}/decline(id=${patient.id})}" method="post" style="display:inline;">
-                    <button type="submit" th:if="${patient.status.name() == 'PENDING'}">Decline</button>
+                <form th:action="@{doctor/{id}/decline(id=${doctorAppointment.id})}" method="post" style="display:inline;">
+                    <button type="submit" th:if="${doctorAppointment.status.name() == 'PENDING'}">Decline</button>
                 </form>
             </div>
         </td>
     </tr>
     </tbody>
 </table>
-
+<a th:href="@{/doctorHome}">Back</a>
 </body>
 </html>

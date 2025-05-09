@@ -6,8 +6,8 @@
 <body>
 <h1>Welcome, <span th:text="${user.username}">User </span></h1>
 
-<form th:action="@{/appointment/patient}" method="get">
-  <button type="submit" class="button patient-btn">Patient Appointment</button>
+<form th:action="@{/appointment/doctorAppointment}" method="get">
+  <button type="submit" class="button doctorAppointment-btn">Patient Appointment</button>
 </form>
 
 <a href="/profile">profile</a>

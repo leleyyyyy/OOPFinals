@@ -1,6 +1,6 @@
 package com.CareNet.CN.service;
 
-import com.CareNet.CN.model.Patient;
+import com.CareNet.CN.model.DoctorAppointment;
 import com.CareNet.CN.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,25 +15,25 @@ public class PatientService {
 
     }
 
-    public List<Patient> getPendingPatients() {
-        return patientRepository.findByStatus(Patient.Status.PENDING);
+    public List<DoctorAppointment> getPendingPatients() {
+        return patientRepository.findByStatus(DoctorAppointment.Status.PENDING);
     }
 
-    public void savePatient(Patient patient) {
-        patientRepository.save(patient);
+    public void savePatient(DoctorAppointment doctorAppointment) {
+        patientRepository.save(doctorAppointment);
     }
 
-    public Patient acceptPatient(Long patientId) {
-        Patient patient = patientRepository.findById(patientId)
+    public DoctorAppointment acceptPatient(Long patientId) {
+        DoctorAppointment doctorAppointment = patientRepository.findById(patientId)
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + patientId));
-        patient.setStatus(Patient.Status.ACCEPTED);
-        return patientRepository.save(patient);
+        doctorAppointment.setStatus(DoctorAppointment.Status.ACCEPTED);
+        return patientRepository.save(doctorAppointment);
     }
 
-    public Patient declinePatient(Long patientId) {
-        Patient patient = patientRepository.findById(patientId)
+    public DoctorAppointment declinePatient(Long patientId) {
+        DoctorAppointment doctorAppointment = patientRepository.findById(patientId)
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + patientId));
-        patient.setStatus(Patient.Status.DECLINED);
-        return patientRepository.save(patient);
+        doctorAppointment.setStatus(DoctorAppointment.Status.DECLINED);
+        return patientRepository.save(doctorAppointment);
     }
 }
