@@ -1,18 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lobby</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carenet Lobby</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(rgba(33, 97, 140, 0.75), rgba(33, 97, 140, 0.75)),
+        url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=681f4b97&is=681dfa17&hm=4edc8c9fe55a5439cb4c08c56850f5f2c22b56d16854b0faf818e7c694c3ee66&=&format=webp&width=756&height=504');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .right-panel {
+      width: 400px;
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px 30px;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      color: #21618c;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    a {
+      text-decoration: none;
+      background-color: #7bc1f7;
+      color: #1b2738;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(123, 193, 247, 0.5);
+      transition: all 0.3s ease;
+      font-weight: 600;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    a:hover,
+    a:focus {
+      background-color: #5a9de0;
+      color: #fff;
+      box-shadow: 0 6px 12px rgba(90, 157, 224, 0.8);
+    }
+
+    a:active {
+      background-color: #4a85c1;
+      box-shadow: 0 3px 6px rgba(74, 133, 193, 0.9);
+      color: #e8f1fb;
+    }
+
+    @media (max-width: 800px) {
+      .right-panel {
+        width: 100%;
+      }
+
+      .left-panel {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>Welcome to the CareNet Lobby</h1>
-
-<div>
-    <a href="/register">Register</a>
-</div>
-<div>
-    <a href="/login">Login</a>
-</div>
+  <div class="left-panel"></div>
+  <div class="right-panel">
+    <div class="container">
+      <h1>Welcome to the<br />Carenet Lobby</h1>
+      <div class="button-container">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
