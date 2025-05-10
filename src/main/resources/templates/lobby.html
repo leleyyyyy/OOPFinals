@@ -20,14 +20,11 @@
 
     .left-panel {
       flex: 1;
-      background: linear-gradient(rgba(33, 97, 140, 0.75), rgba(33, 97, 140, 0.75)),
-        url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=681f4b97&is=681dfa17&hm=4edc8c9fe55a5439cb4c08c56850f5f2c22b56d16854b0faf818e7c694c3ee66&=&format=webp&width=756&height=504');
-      background-size: cover;
-      background-position: center;
+      /* Remove the background property from here */
     }
 
     .right-panel {
-      width: 400px;
+      width: 400px; 
       background-color: #f0f4f8;
       display: flex;
       justify-content: center;
@@ -38,23 +35,6 @@
     .container {
       text-align: center;
       padding: 40px 30px;
-    }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      background: #7bc1f7;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px auto;
-      font-size: 2rem;
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(123, 193, 247, 0.25);
-      user-select: none;
-      font-weight: bold;
-      letter-spacing: 2px;
     }
 
     h1 {
@@ -99,6 +79,17 @@
       color: #e8f1fb;
     }
 
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: linear-gradient(rgba(33, 97, 140, 0.75), rgba(33, 97, 140, 0.75)),
+        url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=681f4b97&is=681dfa17&hm=4edc8c9fe55a5439cb4c08c56850f5f2c22b56d16854b0faf818e7c694c3ee66&=&format=webp&width=756&height=504') center center / cover no-repeat fixed;
+    }
+
     @media (max-width: 800px) {
       .right-panel {
         width: 100%;
@@ -114,7 +105,6 @@
   <div class="left-panel"></div>
   <div class="right-panel">
     <div class="container">
-      <div class="logo">CN</div>
       <h1>Welcome to the<br />Carenet Lobby</h1>
       <div class="button-container">
         <a href="/login">Login</a>
@@ -122,5 +112,6 @@
       </div>
     </div>
   </div>
+  <div class="background-image"></div>
 </body>
 </html>
