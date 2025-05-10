@@ -3,29 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <title>My Profile</title>
+    <style>
+        body {
+            background: #d2edfa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .profile-container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            padding: 32px 24px;
+        }
+        .profile-pic {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .profile-pic img {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 110px;
+            height: 110px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .profile-name {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.4em;
+            margin-bottom: 4px;
+        }
+        .profile-username {
+            text-align: center;
+            color: #444;
+            font-size: 1em;
+            margin-bottom: 18px;
+        }
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+            margin-bottom: 24px;
+        }
+        .profile-details > div {
+            text-align: center;
+            flex: 1;
+        }
+        .profile-details > div:not(:last-child) {
+            border-right: 1px solid #e0e0e0;
+        }
+        .profile-label {
+            color: #888;
+            font-size: 0.98em;
+        }
+        .profile-value {
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .profile-info-list {
+            margin: 0 0 18px 0;
+            padding: 0;
+            list-style: none;
+        }
+        .profile-info-list li {
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .profile-actions {
+            text-align: center;
+            margin-top: 18px;
+        }
+        .profile-actions a {
+            background: #377dff;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1em;
+            margin: 0 8px;
+            display: inline-block;
+        }
+        .profile-actions a.logout {
+            background: #e74c3c;
+        }
+    </style>
 </head>
 <body>
-<h1>My Profile</h1>
-
-<div class="profile-pic">
-    <img th:src="${user.imageUrl}" alt="Profile image" width="150" height="150">
-</div>
-
-<div class="info">
-    <p><label>First Name:</label> <span th:text="${user.firstName}"></span></p>
-    <p><label>Middle Name:</label> <span th:text="${user.middleName}"></span></p>
-    <p><label>Last Name:</label> <span th:text="${user.lastName}"></span></p>
-    <p><label>Username:</label> <span th:text="${user.username}"></span></p>
-    <p><label>Email:</label> <span th:text="${user.email}"></span></p>
-    <p><label>Phone:</label> <span th:text="${user.phoneNumber}"></span></p>
-    <p><label>Birthday:</label> <span th:text="${user.birthday}"></span></p>
-    <p><label>Gender:</label> <span th:text="${user.gender}"></span></p>
-    <p><label>Emergency Contact:</label> <span th:text="${user.emergencyContact}"></span></p>
-    <p><label>Blood Type:</label> <span th:text="${user.bloodType}"></span></p>
-</div>
-
-<a href="/profile/edit">Edit Profile</a> |
-<a href="/logout">Logout</a> |
-<a href="/patientHome">Back</a> |
+    <div class="profile-container">
+        <div class="profile-pic">
+            <img th:src="${user.imageUrl}" alt="Profile image">
+        </div>
+        <div class="profile-name">
+            <span th:text="${user.firstName}">First</span>
+            <span th:text="${user.middleName}">Middle</span>
+            <span th:text="${user.lastName}">Last</span>
+        </div>
+        <div class="profile-username">
+            <span th:text="${user.username}">username</span>
+            <span style="color:#888;"> | </span>
+            <span th:text="${user.gender}">gender</span>
+        </div>
+        <div class="profile-details">
+            <div>
+                <div class="profile-label">Blood</div>
+                <div class="profile-value" th:text="${user.bloodType}">blood type</div>
+            </div>
+            <div>
+                <div class="profile-label">Birthday</div>
+                <div class="profile-value" th:text="${user.birthday}">date</div>
+            </div>
+            <div>
+                <div class="profile-label">Phone</div>
+                <div class="profile-value" th:text="${user.phoneNumber}">phone</div>
+            </div>
+        </div>
+        <ul class="profile-info-list">
+            <li><span class="profile-label">Email:</span> <span th:text="${user.email}">email@example.com</span></li>
+            <li><span class="profile-label">Emergency Contact:</span> <span th:text="${user.emergencyContact}">emergency</span></li>
+        </ul>
+        <div class="profile-actions">
+            <a href="/profile/edit">Edit Profile</a>
+            <a href="/logout" class="logout" id="logout-link">Logout</a>
+            <a href="/patientHome" style="background:#888;">Back</a>
+        </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+          logoutLink.addEventListener('click', function(event) {
+            if (!confirm('Are you sure you want to logout?')) {
+              event.preventDefault();
+            }
+          });
+        }
+      });
+    </script>
 </body>
 </html>
