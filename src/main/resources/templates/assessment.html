@@ -2,33 +2,104 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Your Assessments</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background: #d2edfa;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      padding: 32px 24px;
+    }
+    h1 {
+      color: #2a4a6a;
+      font-size: 2em;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+      background: #f7fbff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 14px 10px;
+      text-align: center;
+    }
+    th {
+      background: #377dff;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05em;
+      border-bottom: 2px solid #c6eafd;
+    }
+    tr:nth-child(even) {
+      background: #eaf6fd;
+    }
+    tr:nth-child(odd) {
+      background: #f7fbff;
+    }
+    td {
+      color: #2a4a6a;
+      font-size: 1em;
+    }
+    .back-btn {
+      display: inline-block;
+      background: #377dff;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1em;
+      font-weight: 600;
+      transition: background 0.2s;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .back-btn:hover {
+      background: #285bb5;
+    }
+  </style>
 </head>
 <body>
-<h1>Your Assessments</h1>
-
-<table>
-  <thead>
-  <tr>
-    <th>Age</th>
-    <th>Date</th>
-    <th>Height</th>
-    <th>Weight</th>
-    <th>Notes</th>
-    <th>Treatment Plan</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="assessment : ${assessments}">
-    <td th:text="${assessment.age}"></td>
-    <td th:text="${assessment.date}"></td>
-    <td th:text="${assessment.height}"></td>
-    <td th:text="${assessment.weight}"></td>
-    <td th:text="${assessment.notes}"></td>
-    <td th:text="${assessment.treatmentPlan}"></td>
-  </tr>
-  </tbody>
-</table>
-
-<a href="/patientHome">Back to Home</a>
+  <div class="container">
+    <h1>Your Assessments</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Age</th>
+          <th>Date</th>
+          <th>Height</th>
+          <th>Weight</th>
+          <th>Notes</th>
+          <th>Treatment Plan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="assessment : ${assessments}">
+          <td th:text="${assessment.age}"></td>
+          <td th:text="${assessment.date}"></td>
+          <td th:text="${assessment.height}"></td>
+          <td th:text="${assessment.weight}"></td>
+          <td th:text="${assessment.notes}"></td>
+          <td th:text="${assessment.treatmentPlan}"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="text-align:center;">
+      <a href="/patientHome" class="back-btn">Back to Home</a>
+    </div>
+  </div>
 </body>
 </html>
