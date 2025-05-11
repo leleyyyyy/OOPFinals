@@ -6,30 +6,124 @@
   <title>Doctor Home</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background: #d2edfa;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+    .navbar .brand {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #377dff;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+    .nav-links a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #2a4a6a;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+      font-size: 1em;
+      transition: color 0.2s, border-bottom 0.2s;
+    }
+    .nav-links a.active {
+      border-bottom: 2px solid #377dff;
+      color: #377dff;
+    }
+    .logout-link {
+      background: #e74c3c;
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-left: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .logout-link:hover {
+      background: #c0392b;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      padding: 32px 24px;
+    }
+    h1 {
+      color: #2a4a6a;
+      font-size: 2.2em;
+      font-weight: 600;
       text-align: center;
-      padding: 50px;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+    p {
+      text-align: center;
+      color: #444;
+      margin-bottom: 24px;
+      font-size: 1.1em;
+    }
+    .dashboard-btn {
+      display: block;
+      margin: 0 auto 30px auto;
+      padding: 12px 28px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #377dff;
+      color: #fff;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(55, 125, 255, 0.08);
+      transition: background 0.2s;
+      width: fit-content;
+    }
+    .dashboard-btn:hover {
+      background: #285bb5;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px auto;
-      background: white;
+      margin: 20px auto 0 auto;
+      background: #f7fbff;
+      border-radius: 12px;
+      overflow: hidden;
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 90%;
+      max-width: 100%;
     }
     th, td {
-      padding: 12px;
-      text-align: left;
-      border: 1px solid #ddd;
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid #e0e0e0;
     }
     th {
-      background-color: #2a9d8f;
-      color: white;
+      background: #377dff;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05em;
+      border-bottom: 2px solid #c6eafd;
     }
     tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background: #eaf6fd;
+    }
+    tr:nth-child(odd) {
+      background: #f7fbff;
     }
     img {
       border-radius: 50%;
@@ -38,82 +132,132 @@
       object-fit: cover;
     }
     .manage-btn {
-      background-color: #2a9d8f;
-      color: white;
+      background-color: #377dff;
+      color: #fff;
       border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
+      padding: 10px 22px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 1em;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(55, 125, 255, 0.08);
     }
-    .nav-buttons {
-      margin: 30px 0;
+    .manage-btn:hover,
+    .manage-btn:focus {
+      background-color: #285bb5;
+      color: #fff;
     }
-    .nav-buttons a, .nav-buttons button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background-color: #0077cc;
-      color: white;
+    td:last-child {
       text-align: center;
-      cursor: pointer;
-      text-decoration: none;
     }
-    .nav-buttons a {
-      background-color: #2a9d8f;
+    td form {
+      display: flex;
+      justify-content: center;
+    }
+    .search-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .search-container input, .search-container button {
+      padding: 10px;
+      margin: 0 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    .search-container button {
+      background-color: #377dff;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<h1>Welcome to the Doctor Dashboard</h1>
-<p>View and Manage Patient Profiles:</p>
-
-<!-- Back to Dashboard button -->
-<div class="nav-buttons">
-  <a th:href="@{/register/doctor}">Back to Dashboard</a>
+<!-- Navbar -->
+<div class="navbar">
+  <a href="/doctorHome" class="brand">CareNet</a>
+  <div class="nav-links">
+    <a href="/doctorHome" class="active">Home</a>
+    <a th:href="@{/logout}" class="logout-link">Logout</a>
+  </div>
 </div>
 
-<!-- Patient Profiles in Table -->
-<table>
-  <thead>
-  <tr>
-    <th>Picture</th>
-    <th>Full Name</th>
-    <th>Username</th>
-    <th>Gender</th>
-    <th>Phone Number</th>
-    <th>Email</th>
-    <th>Emergency Contact</th>
-    <th>Blood Type</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <!-- Iterate over the list of patients -->
-  <tr th:each="patient : ${patients}">
-    <td>
-      <!-- Display patient picture or placeholder -->
-      <img th:src="${patient.imageUrl != null ? patient.imageUrl : 'https://via.placeholder.com/80'}" alt="Patient Picture">
-    </td>
-    <td th:text="${patient.firstName} + ' ' + ${patient.middleName ?: ''} + ' ' + ${patient.lastName}"></td>
-    <td th:text="${patient.username}"></td>
-    <td th:text="${patient.gender ?: 'Not Specified'}"></td>
-    <td th:text="${patient.phoneNumber}"></td>
-    <td th:text="${patient.email}"></td>
-    <td th:text="${patient.emergencyContact ?: 'Not Available'}"></td>
-    <td th:text="${patient.bloodType ?: 'Unknown'}"></td>
-    <td>
-      <a th:href="@{/addAssessment}">Add New Assessment</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<!-- Main Container -->
+<div class="container">
+  <h1>Welcome to the Doctor Dashboard</h1>
+  <p>View and Manage Patient Profiles:</p>
+  <a th:href="@{/register/doctor}" class="dashboard-btn">Go to Dashboard</a>
 
-<!-- Logout and Add Assessment buttons -->
-<div class="nav-buttons">
-  <a th:href="@{/logout}">Logout</a>
+  <!-- Patient Profiles Section -->
+  <table>
+    <thead>
+    <tr>
+      <th>Picture</th>
+      <th>Full Name</th>
+      <th>Username</th>
+      <th>Gender</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Emergency Contact</th>
+      <th>Blood Type</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterate over the list of patients -->
+    <tr th:each="patient : ${patients}">
+      <td>
+        <!-- Display patient picture or placeholder -->
+        <img th:src="${patient.imageUrl != null ? patient.imageUrl : 'https://via.placeholder.com/80'}" alt="Patient Picture">
+      </td>
+      <td th:text="${patient.firstName} + ' ' + ${patient.middleName ?: ''} + ' ' + ${patient.lastName}"></td>
+      <td th:text="${patient.username}"></td>
+      <td th:text="${patient.gender ?: 'Not Specified'}"></td>
+      <td th:text="${patient.phoneNumber}"></td>
+      <td th:text="${patient.email}"></td>
+      <td th:text="${patient.emergencyContact ?: 'Not Available'}"></td>
+      <td th:text="${patient.bloodType ?: 'Unknown'}"></td>
+      <td>
+        <a th:href="@{/addAssessment}">Add New Assessment</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Search Container -->
+  <div class="search-container">
+    <form th:action="@{/doctorHome}" method="GET">
+      <input type="text" name="username" placeholder="Enter username to view assessments" required>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- Assessments Section -->
+  <table th:if="${searchedUsername}" style="margin-top: 20px;">
+    <caption>Assessments for [[${searchedUsername}]]</caption>
+    <thead>
+      <tr>
+        <th>Age</th>
+        <th>Date</th>
+        <th>Height</th>
+        <th>Weight</th>
+        <th>Notes</th>
+        <th>Treatment Plan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="assessment : ${assessments}">
+        <td th:text="${assessment.age}"></td>
+        <td th:text="${assessment.date}"></td>
+        <td th:text="${assessment.height}"></td>
+        <td th:text="${assessment.weight}"></td>
+        <td th:text="${assessment.notes}"></td>
+        <td th:text="${assessment.treatmentPlan}"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 </body>
