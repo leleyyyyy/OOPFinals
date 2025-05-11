@@ -112,7 +112,7 @@ public class SiteController {
     }
 
     // Redirect to patient registration page
-    @GetMapping("/doctorAppointment/appointment")
+    @GetMapping("/appointment/doctorAppointment")
     public String showPatientRegistrationForm(Model model) {
         model.addAttribute("patientDTO", new AppointmentSetter()); // Make sure this class exists
         return "appointment";
