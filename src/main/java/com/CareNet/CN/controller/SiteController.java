@@ -120,10 +120,14 @@ public class SiteController {
 
     @PostMapping("/doctorAppointment/appointment")
     public String registerPatient(@ModelAttribute("patientDTO") AppointmentSetter dto, Model model) {
+        if (dto.getAppointmentDate() == null) {
+            model.addAttribute("error", "Appointment date is required.");
+            return "appointment";
+        }
         DoctorAppointment doctorAppointment = new DoctorAppointment(dto.getName(), dto.getAppointmentDate().toString());
         patientService.savePatient(doctorAppointment);
         model.addAttribute("success", "Patient registered successfully!,We will reach out for further update");
-        return "appointment";
+        return "patientHome";
     }
     // Mapping for the "addAssessment" page
     @GetMapping("/addAssessment")
