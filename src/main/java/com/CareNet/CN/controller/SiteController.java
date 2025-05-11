@@ -64,6 +64,7 @@ public class SiteController {
 
     @GetMapping("/patientHome")
     public String showPatientHome(Model model) {
+        model.addAttribute("patientDTO", new AppointmentSetter());
         User user = getCurrentUser(); // Get the current authenticated user
         if (user == null) {
             return "redirect:/login"; // Redirect if no user is authenticated
@@ -119,11 +120,11 @@ public class SiteController {
     }
 
     @PostMapping("/doctorAppointment/appointment")
-    public String registerPatient(@ModelAttribute("patientDTO") AppointmentSetter dto, Model model) {
+    public String registerPatient(@ModelAttribute("patientDTO") AppointmentSetter dto, RedirectAttributes redirectAttributes) {
         DoctorAppointment doctorAppointment = new DoctorAppointment(dto.getName(), dto.getAppointmentDate().toString());
         patientService.savePatient(doctorAppointment);
-        model.addAttribute("success", "Patient registered successfully!,We will reach out for further update");
-        return "appointment";
+        redirectAttributes.addFlashAttribute("success", "Appointment booked successfully.");
+        return "redirect:/patientHome";
     }
     // Mapping for the "addAssessment" page
     @GetMapping("/addAssessment")
