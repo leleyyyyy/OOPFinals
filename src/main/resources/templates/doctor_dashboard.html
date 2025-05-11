@@ -71,7 +71,7 @@
         <td th:text="${doctorAppointment.datetime}"></td>
         <td th:text="${doctorAppointment.status}"></td>
         <td>
-            <div th:if="${doctorAppointment.status == T(com.CareNet.CN.model.DoctorAppointment.Status).PENDING}">
+            <div th:if="${doctorAppointment.status.name() == 'PENDING'}">
                 <form th:action="@{doctor/{id}/accept(id=${doctorAppointment.id})}" method="post" style="display:inline;">
                     <button type="submit" th:if="${doctorAppointment.status.name() == 'PENDING'}">Accept</button>
                 </form>
