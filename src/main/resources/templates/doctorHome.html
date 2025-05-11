@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lobby</title>
+  <title>Doctor Home</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,48 +11,109 @@
       text-align: center;
       padding: 50px;
     }
-    .button {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 18px;
-      margin: 10px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
     }
-    .doctor-btn {
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
       background-color: #2a9d8f;
       color: white;
     }
-    .doctorAppointment-btn {
-      background-color: #e63946;
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    img {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+    .manage-btn {
+      background-color: #2a9d8f;
       color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    .nav-links {
-      margin-top: 30px;
+    .nav-buttons {
+      margin: 30px 0;
     }
-    .nav-links a {
-      margin: 0 10px;
+    .nav-buttons a, .nav-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
       font-size: 16px;
-      color: #333;
+      border: none;
+      border-radius: 5px;
+      background-color: #0077cc;
+      color: white;
+      text-align: center;
+      cursor: pointer;
       text-decoration: none;
+    }
+    .nav-buttons a {
+      background-color: #2a9d8f;
     }
   </style>
 </head>
 <body>
 
-<h1>Welcome to the CareNet Health Clinic</h1>
-<p>Make an Appointment?:</p>
+<h1>Welcome to the Doctor Dashboard</h1>
+<p>View and Manage Patient Profiles:</p>
 
-<form th:action="@{/register/doctor}" method="get">
-  <button type="submit" class="button doctor-btn">Go To Dashboard</button>
-</form>
+<!-- Back to Dashboard button -->
+<div class="nav-buttons">
+  <a th:href="@{/register/doctor}">Back to Dashboard</a>
+</div>
 
-<!-- Button to register as a doctor -->
+<!-- Patient Profiles in Table -->
+<table>
+  <thead>
+  <tr>
+    <th>Picture</th>
+    <th>Full Name</th>
+    <th>Username</th>
+    <th>Gender</th>
+    <th>Phone Number</th>
+    <th>Email</th>
+    <th>Emergency Contact</th>
+    <th>Blood Type</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Iterate over the list of patients -->
+  <tr th:each="patient : ${patients}">
+    <td>
+      <!-- Display patient picture or placeholder -->
+      <img th:src="${patient.imageUrl != null ? patient.imageUrl : 'https://via.placeholder.com/80'}" alt="Patient Picture">
+    </td>
+    <td th:text="${patient.firstName} + ' ' + ${patient.middleName ?: ''} + ' ' + ${patient.lastName}"></td>
+    <td th:text="${patient.username}"></td>
+    <td th:text="${patient.gender ?: 'Not Specified'}"></td>
+    <td th:text="${patient.phoneNumber}"></td>
+    <td th:text="${patient.email}"></td>
+    <td th:text="${patient.emergencyContact ?: 'Not Available'}"></td>
+    <td th:text="${patient.bloodType ?: 'Unknown'}"></td>
+    <td>
+      <a th:href="@{/addAssessment}">Add New Assessment</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
-<!-- Additional links -->
-<div class="nav-links">
+<!-- Logout and Add Assessment buttons -->
+<div class="nav-buttons">
   <a th:href="@{/logout}">Logout</a>
-  <a th:href="@{/addAssessment}">Add New Assessment</a>
 </div>
 
 </body>

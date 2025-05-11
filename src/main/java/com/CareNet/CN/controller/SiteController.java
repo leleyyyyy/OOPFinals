@@ -84,8 +84,18 @@ public class SiteController {
 
 
     @GetMapping("/doctorHome")
-    public String showLobby() {
-        return "doctorHome";  // Redirects to lobby.html
+    public String showDoctorHome(Model model) {
+        // Fetch patients with the role "ROLE_PATIENT" directly from the database
+        List<User> patients = userRepository.findByRole("ROLE_PATIENT");
+
+        // Debugging log (optional, can be removed)
+        System.out.println("Patients fetched: " + patients);
+
+        // Add the patients list to the model
+        model.addAttribute("patients", patients);
+
+        // Return the doctorHome view
+        return "doctorHome";
     }
 
     // Redirect to doctor registration page
