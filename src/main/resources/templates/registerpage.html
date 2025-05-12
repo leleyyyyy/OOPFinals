@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(rgba(33, 97, 140, 0.75), rgba(33, 97, 140, 0.75)),
-                url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=68234017&is=6821ee97&hm=43d16901a7d552dfbc068aebc41c57f79193936d24e7c672004d8e3584d10b5e&=&format=webp&width=1430&height=953');
+                url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=68234017&is=6821ee97&hm=43d16901a7d552dfbc068aebc41c57f79193936d24e7c672004d8e3584d10b5e&=&format=webp&width=1430&height=953    ');
             background-size: cover;
             background-position: center;
             overflow-x: hidden;
@@ -242,10 +242,14 @@
 <body>
     <div id="fade-overlay"></div>
     <div class="card">
-        <div class="logo">CN</div>
+        <img 
+      src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169" 
+      alt="CareNet Logo"
+      style="width: 350px; height: auto; margin-bottom: 18px; display: block; border-radius: 0; background: none; box-shadow: none;"
+    />
         <h1>Create Account</h1>
-        <div class="subtitle">Register for your Carenet account</div>
-        <form action="#" th:action="@{/process_register}" method="post" th:object="${user}">
+        <div class="subtitle">Register for your CareNet account</div>
+        <form th:action="@{/process_register}" method="post" th:object="${user}">
             <div class="form-grid">
                 <!-- Row 1 -->
                 <div class="input-group">
@@ -294,6 +298,9 @@
             </div>
             <button type="submit">Register</button>
         </form>
+        <div class="error" th:if="${registrationError}" style="margin-bottom:16px; text-align:center;">
+            <span th:text="${registrationError}"></span>
+        </div>
         <div class="no-account">
             Already have an account? <a href="/login">Log in</a>
         </div>

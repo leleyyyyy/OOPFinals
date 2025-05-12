@@ -182,12 +182,12 @@ public class SiteController {
         @PostMapping("/process_register")
     public String processRegistration(@ModelAttribute User user, Model model) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            model.addAttribute("usernameError", "Username is already taken.");
+            model.addAttribute("registrationError", "Username is already taken.");
             return "registerpage";
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            model.addAttribute("emailError", "Email is already registered.");
+            model.addAttribute("registrationError", "Email is already registered.");
             return "registerpage";
         }
 

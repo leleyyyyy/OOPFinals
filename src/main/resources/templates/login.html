@@ -192,25 +192,32 @@
       url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=68234017&is=6821ee97&hm=43d16901a7d552dfbc068aebc41c57f79193936d24e7c672004d8e3584d10b5e&=&format=webp&width=1430&height=953') center center / cover no-repeat fixed;
   "></div>
   <div class="card">
-      <div class="logo">CN</div>
-      <h1>Welcome Back</h1>
-      <div class="subtitle">Sign in to your Carenet account</div>
-      <form th:action="@{/process}" method="post">
-          <div class="input-group">
-              <label for="username">Username</label>
-              <input id="username" type="text" name="username" autocomplete="username" required />
-          </div>
-          <div class="input-group">
-              <label for="password">Password</label>
-              <input id="password" type="password" name="password" autocomplete="current-password" required />
-          </div>
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-          <button type="submit">Login</button>
-      </form>
-      <div class="no-account">
-        Don't have an account? <a href="/register">Create account</a>
-      </div>
-  </div>
+    <img 
+      src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169" 
+      alt="CareNet Logo"
+      style="width: 350px; height: auto; margin-bottom: 18px; display: block; border-radius: 0; background: none; box-shadow: none;"
+    />
+    <h1>Welcome Back</h1>
+    <div class="subtitle">Sign in to your CareNet account</div>
+    <div th:if="${param.error}" style="color:#d45a5a; margin-bottom:16px; text-align:center; font-weight:600;">
+        Invalid username or password.
+    </div>
+    <form th:action="@{/process}" method="post">
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" autocomplete="username" required />
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" autocomplete="current-password" required />
+        </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">Login</button>
+    </form>
+    <div class="no-account">
+      Don't have an account? <a href="/register">Create account</a>
+    </div>
+</div>
   <script>
     window.addEventListener('DOMContentLoaded', function() {
       document.body.style.opacity = '1';
