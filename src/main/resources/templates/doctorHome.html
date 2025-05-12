@@ -3,57 +3,506 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lobby</title>
+  <title>Doctor Home</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      text-align: center;
-      padding: 50px;
+      background: linear-gradient(135deg, #e3f0ff 0%, #44c6da 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    .button {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 18px;
-      margin: 10px;
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
-    .doctor-btn {
-      background-color: #2a9d8f;
-      color: white;
-    }
-    .doctorAppointment-btn {
-      background-color: #e63946;
-      color: white;
+    .navbar .brand {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #377dff;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .nav-links {
-      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .nav-links a {
-      margin: 0 10px;
-      font-size: 16px;
-      color: #333;
+      margin: 0 20px;
       text-decoration: none;
+      color: #2a4a6a;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+      font-size: 1em;
+      transition: color 0.2s, border-bottom 0.2s;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .nav-links a.active {
+      border-bottom: 2px solid #7ec4cf;
+      color: #7ec4cf;
+    }
+    .logout-link {
+      background: #d45a5a;
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-left: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+      border: none;
+      font-size: 1em;
+      display: inline-block;
+    }
+    .logout-link:hover {
+      background-color: #ff8c8c;
+      color: #fff !important;
+    }
+    .dashboard-flex {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 32px;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 48px 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      padding: 32px 24px;
+      min-width: 350px;
+      max-width: 600px;
+      flex: 1 1 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      height: 100%;
+    }
+    .dashboard-center-card {
+      min-width: 420px;
+      max-width: 520px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      height: 480px;
+    }
+    .dashboard-center-card h1 {
+      color: #2a4a6a;
+      font-size: 2.2em;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .dashboard-center-card p {
+      color: #444;
+      font-size: 1.2em;
+      margin-bottom: 24px;
+    }
+    .dashboard-btn {
+      background-color: #7ec4cf;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 1.2em;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: background-color 0.3s, color 0.3s, filter 0.3s;
+      box-shadow: 0 2px 8px rgba(55, 125, 255, 0.08);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .dashboard-btn:hover,
+    .manage-btn:hover,
+    .manage-btn:focus,
+    .search-container button:hover {
+      filter: brightness(0.92);
+      background-color: #7ec4cf;
+      color: #fff;
+    }
+    .manage-btn,
+    .search-container button {
+      background-color: #7ec4cf;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, filter 0.3s;
+      box-shadow: 0 2px 8px rgba(55, 125, 255, 0.08);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .card h2 {
+      color: #184a6a;
+      font-size: 1.3em;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+    .card h3 {
+      color: #2a4a6a;
+      margin-top: 0;
+    }
+    .patient-table-container {
+      width: 100%;
+      max-height: 60vh;
+      overflow-y: auto;
+      overflow-x: visible;
+      background: transparent;
+      box-shadow: none;
+      margin-bottom: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f7fbff;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 0;
+      font-size: 0.98em;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    th, td {
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid #e0e0e0;
+      word-break: break-word;
+      max-width: 140px;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    th {
+      background: #a2cbec;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05em;
+      border-bottom: 2px solid #c6eafd;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    tr:nth-child(even) {
+      background: #eaf6fd;
+    }
+    tr:nth-child(odd) {
+      background: #f7fbff;
+    }
+    img {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+    }
+    .brand-logo { /* Added style for the brand logo */
+      border-radius: 0;
+    }
+    .manage-btn {
+      background-color: #7ec4cf;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1em;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(55, 125, 255, 0.08);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    td:last-child {
+      text-align: center;
+    }
+    td form {
+      display: flex;
+      justify-content: center;
+    }
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .search-container input, .search-container button {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    .search-container button {
+      background-color: #7ec4cf;
+      color: white;
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .search-assessments-card {
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 32px 24px;
+    }
+    .search-assessments-card.filled {
+      justify-content: flex-start;
+    }
+    .assessment-table-container {
+      max-height: 303.5px;
+      overflow-y: auto;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 1200px) {
+      .dashboard-flex {
+        flex-direction: column;
+        align-items: center;
+      }
+      .card {
+        max-width: 95vw;
+      }
+      .dashboard-center-card {
+        min-width: 0;
+        max-width: 100vw;
+        width: 100%;
+      }
+    }
+    @media (max-width: 900px) {
+      .dashboard-flex {
+        flex-direction: column;
+        gap: 24px;
+      }
+      .card {
+        min-width: 0;
+        width: 98vw;
+        max-width: 98vw;
+        padding: 18px 4vw;
+      }
+      .patient-table-container {
+        max-height: 40vh;
+      }
     }
   </style>
 </head>
 <body>
-
-<h1>Welcome to the CareNet Health Clinic</h1>
-<p>Make an Appointment?:</p>
-
-<form th:action="@{/register/doctor}" method="get">
-  <button type="submit" class="button doctor-btn">Go To Dashboard</button>
-</form>
-
-<!-- Button to register as a doctor -->
-
-<!-- Additional links -->
-<div class="nav-links">
-  <a th:href="@{/logout}">Logout</a>
-  <a th:href="@{/addAssessment}">Add New Assessment</a>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+       alt="CareNet Logo"
+       class="brand-logo" 
+       style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
+  <div class="nav-links">
+    <a href="/patientHome" class="active">Home</a>
+    <a href="/profile">Profile</a>
+    <a href="/assessment">Your Assessments</a>
+    <a id="logout-link" href="/logout" class="logout-link">Logout</a>
+  </div>
 </div>
 
+<!-- Dashboard Cards Layout -->
+<div class="dashboard-flex" style="flex-direction: column; align-items: center; gap: 32px;">
+
+  <!-- Top Row: Welcome and Search Assessments -->
+  <div style="display: flex; flex-wrap: wrap; gap: 32px; width: 100%; justify-content: center;">
+    <!-- Center Welcome Card -->
+    <div class="card dashboard-center-card" style="min-width:320px;">
+      <h1 style="font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">Welcome, Doctor</h1>
+      <p style="font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">View and Manage Patient Profiles:</p>
+      <a th:href="@{/register/doctor}" class="dashboard-btn">Go to Dashboard</a>
+    </div>
+
+    <!-- Search Assessments Card -->
+    <div th:class="'card search-assessments-card' + (${searchedUsername} ? ' filled' : '')" style="min-width:320px; max-width:600px;">
+      <h2 style="font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">Search Assessments</h2>
+      <form th:action="@{/doctorHome}" method="GET" class="search-container">
+        <input type="text" name="username" placeholder="Enter username to view assessments" required>
+        <button type="submit">Search</button>
+      </form>
+      <div th:if="${searchedUsername}">
+        <h3 style="color:#2a4a6a; margin-top:0;">Assessments for <span style="color:#2a4a6a;">[[${searchedUsername}]]</span>:</h3>
+        <div class="assessment-table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Age</th>
+                <th>Date</th>
+                <th>Height</th>
+                <th>Weight</th>
+                <th>Notes</th>
+                <th>Treatment Plan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="assessment : ${assessments}">
+                <td th:text="${assessment.age}"></td>
+                <td th:text="${assessment.date}"></td>
+                <td th:text="${assessment.height}"></td>
+                <td th:text="${assessment.weight}"></td>
+                <td th:text="${assessment.notes}"></td>
+                <td th:text="${assessment.treatmentPlan}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient List Card (Full Width) -->
+  <div class="card" style="width: 100%; max-width: 1200px;">
+    <h2 style="color:#184a6a; font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">Patient List</h2>
+    <div class="patient-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Picture</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Gender</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Emergency Contact</th>
+            <th>Blood Type</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="patient : ${patients}">
+            <td>
+              <img th:src="${patient.imageUrl != null ? patient.imageUrl : 'https://via.placeholder.com/80'}" alt="Patient Picture">
+            </td>
+            <td th:text="${patient.firstName} + ' ' + ${patient.middleName ?: ''} + ' ' + ${patient.lastName}"></td>
+            <td th:text="${patient.username}"></td>
+            <td th:text="${patient.gender ?: 'Not Specified'}"></td>
+            <td th:text="${patient.phoneNumber}"></td>
+            <td th:text="${patient.email}"></td>
+            <td th:text="${patient.emergencyContact ?: 'Not Available'}"></td>
+            <td th:text="${patient.bloodType ?: 'Unknown'}"></td>
+            <td>
+              <form th:action="@{/addAssessment}" method="get" style="display:inline;">
+                <button type="submit" class="manage-btn">Assess</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Create custom modal
+        var modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.25)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '9999';
+
+        // Add keyframes for pop-in, pop-out, and fade-out animation
+        var style = document.createElement('style');
+        style.innerHTML = `
+          @keyframes popInModalBox {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes popOutModalBox {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.7); opacity: 0; }
+          }
+          @keyframes fadeOutBody {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+
+        var box = document.createElement('div');
+        box.style.background = '#fff';
+        box.style.padding = '32px 24px';
+        box.style.borderRadius = '12px';
+        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+        box.style.textAlign = 'center';
+        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
+
+        var yesBtn = document.createElement('button');
+        yesBtn.textContent = 'Yes';
+        yesBtn.style.background = '#d45a5a';
+        yesBtn.style.color = '#fff';
+        yesBtn.style.border = 'none';
+        yesBtn.style.borderRadius = '8px';
+        yesBtn.style.padding = '10px 28px';
+        yesBtn.style.margin = '0 12px';
+        yesBtn.style.fontWeight = '600';
+        yesBtn.style.fontSize = '1em';
+        yesBtn.style.cursor = 'pointer';
+        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        yesBtn.addEventListener('click', function() {
+          // Animate body fade out, then redirect
+          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
+          document.body.style.animationFillMode = 'forwards';
+          setTimeout(function() {
+            window.location.href = logoutLink.getAttribute('href');
+          }, 420);
+        });
+
+        var noBtn = document.createElement('button');
+        noBtn.textContent = 'No';
+        noBtn.style.background = '#7ec4cf';
+        noBtn.style.color = '#fff';
+        noBtn.style.border = 'none';
+        noBtn.style.borderRadius = '8px';
+        noBtn.style.padding = '10px 28px';
+        noBtn.style.margin = '0 12px';
+        noBtn.style.fontWeight = '600';
+        noBtn.style.fontSize = '1em';
+        noBtn.style.cursor = 'pointer';
+        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        noBtn.addEventListener('click', function() {
+          // Pop-out animation
+          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+          box.addEventListener('animationend', function handler() {
+            document.body.removeChild(modal);
+            box.removeEventListener('animationend', handler);
+          });
+        });
+
+        box.appendChild(yesBtn);
+        box.appendChild(noBtn);
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+      });
+    }
+  });
+</script>
 </body>
 </html>

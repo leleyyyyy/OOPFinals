@@ -1,38 +1,289 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Add Assessment</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e3f0ff 0%, #44c6da 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .navbar .brand {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #377dff;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .nav-links a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #2a4a6a;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+      transition: color 0.2s, border-bottom 0.2s;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .nav-links a.active {
+      border-bottom: 2px solid #7ec4cf;
+      color: #7ec4cf;
+    }
+    .logout-link {
+      background: #d45a5a;
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-left: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+      border: none;
+      font-size: 1em;
+      display: inline-block;
+    }
+    .logout-link:hover {
+      background-color: #ff8c8c;
+      color: #fff !important;
+    }
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      padding: 32px 24px;
+    }
+    h1 {
+      text-align: center;
+      color: #2a4a6a;
+      font-size: 2em;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    label {
+      font-weight: 500;
+      color: #184a6a;
+      display: block;
+      margin-bottom: 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 16px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #c6eafd;
+      background: #f7fbff;
+      font-size: 1em;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 60px;
+      max-height: 200px;
+    }
+    button[type="submit"] {
+      padding: 0 24px;
+      background-color: #7ec4cf;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0px;
+      transition: background-color 0.3s, color 0.3s;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      height: 44px;
+      line-height: 44px;
+      box-sizing: border-box;
+      display: inline-block;
+    }
+    button[type="submit"]:hover {
+      filter: brightness(0.92);
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px 4px;
+        padding: 16px 6px;
+      }
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 10px;
+        gap: 10px;
+      }
+      .nav-links {
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>Add a New Patient Assessment</h1>
+<div class="navbar">
+  <div class="brand">CareNet</div>
+  <div class="nav-links">
+    <a href="/doctorHome">Home</a>
+    <a href="/register/doctor">Dashboard</a>
+    <a id="logout-link" href="/logout" class="logout-link">Logout</a>
+  </div>
+</div>
+<div class="container">
+  <h1>Add a New Patient Assessment</h1>
+  <form th:action="@{/addAssessment}" th:object="${patientAssessment}" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" th:field="*{username}" required />
 
-<form th:action="@{/addAssessment}" th:object="${patientAssessment}" method="post">
-  <label for="age">Age:</label>
-  <input type="number" id="age" th:field="*{age}" required /><br/>
+    <label for="age">Age:</label>
+    <input type="number" id="age" th:field="*{age}" required />
 
-  <label for="date">Date:</label>
-  <input type="date" id="date" th:field="*{date}" required /><br/>
+    <label for="height">Height (cm):</label>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <input type="number" id="height" th:field="*{height}" required min="0" step="1" style="flex:1;" />
+      <span style="font-size: 1em; color: #184a6a;">cm</span>
+    </div>
 
-  <label for="height">Height:</label>
-  <input type="number" step="0.01" id="height" th:field="*{height}" required /><br/>
+    <label for="weight">Weight (kg):</label>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <input type="number" step="0.01" id="weight" th:field="*{weight}" required min="0" style="flex:1;" />
+      <span style="font-size: 1em; color: #184a6a;">kg</span>
+    </div>
 
-  <label for="weight">Weight:</label>
-  <input type="number" step="0.01" id="weight" th:field="*{weight}" required /><br/>
+    <label for="date">Date:</label>
+    <input type="date" id="date" th:field="*{date}" required />
 
-  <label for="notes">Notes:</label>
-  <textarea id="notes" th:field="*{notes}" required></textarea><br/>
+    <label for="notes">Notes:</label>
+    <textarea id="notes" th:field="*{notes}" required></textarea>
 
-  <label for="symptomsOrNotes">Symptoms/Notes:</label>
-  <textarea id="symptomsOrNotes" th:field="*{symptomsOrNotes}" required></textarea><br/>
+    <label for="symptomsOrNotes">Symptoms</label>
+    <textarea id="symptomsOrNotes" th:field="*{symptomsOrNotes}" required></textarea>
 
-  <label for="treatmentPlan">Treatment Plan:</label>
-  <textarea id="treatmentPlan" th:field="*{treatmentPlan}" required></textarea><br/>
+    <label for="treatmentPlan">Treatment Plan:</label>
+    <textarea id="treatmentPlan" th:field="*{treatmentPlan}" required></textarea>
 
-  <label for="username">Username:</label>
-  <input type="text" id="username" th:field="*{username}" required /><br/>
+    <div style="text-align: center;">
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Create custom modal
+        var modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.25)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '9999';
 
-  <button type="submit">Submit</button>
-</form>
+        // Add keyframes for pop-in, pop-out, and fade-out animation
+        var style = document.createElement('style');
+        style.innerHTML = `
+          @keyframes popInModalBox {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes popOutModalBox {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.7); opacity: 0; }
+          }
+          @keyframes fadeOutBody {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
 
+        var box = document.createElement('div');
+        box.style.background = '#fff';
+        box.style.padding = '32px 24px';
+        box.style.borderRadius = '12px';
+        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+        box.style.textAlign = 'center';
+        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
+
+        var yesBtn = document.createElement('button');
+        yesBtn.textContent = 'Yes';
+        yesBtn.style.background = '#d45a5a';
+        yesBtn.style.color = '#fff';
+        yesBtn.style.border = 'none';
+        yesBtn.style.borderRadius = '8px';
+        yesBtn.style.padding = '10px 28px';
+        yesBtn.style.margin = '0 12px';
+        yesBtn.style.fontWeight = '600';
+        yesBtn.style.fontSize = '1em';
+        yesBtn.style.cursor = 'pointer';
+        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        yesBtn.addEventListener('click', function() {
+          // Animate body fade out, then redirect
+          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
+          document.body.style.animationFillMode = 'forwards';
+          setTimeout(function() {
+            window.location.href = logoutLink.getAttribute('href');
+          }, 420);
+        });
+
+        var noBtn = document.createElement('button');
+        noBtn.textContent = 'No';
+        noBtn.style.background = '#7ec4cf';
+        noBtn.style.color = '#fff';
+        noBtn.style.border = 'none';
+        noBtn.style.borderRadius = '8px';
+        noBtn.style.padding = '10px 28px';
+        noBtn.style.margin = '0 12px';
+        noBtn.style.fontWeight = '600';
+        noBtn.style.fontSize = '1em';
+        noBtn.style.cursor = 'pointer';
+        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        noBtn.addEventListener('click', function() {
+          // Pop-out animation
+          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+          box.addEventListener('animationend', function handler() {
+            document.body.removeChild(modal);
+            box.removeEventListener('animationend', handler);
+          });
+        });
+
+        box.appendChild(yesBtn);
+        box.appendChild(noBtn);
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+      });
+    }
+  });
+</script>
 </body>
 </html>

@@ -2,10 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Patient Home</title>
+  <!-- Add Poppins font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
   <style>
     body {
-      background: #d2edfa;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f0ff 0%, #44c6da 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
@@ -16,6 +20,19 @@
       background: #fff;
       padding: 20px 40px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .navbar .brand {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #377dff;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .nav-links a {
       margin: 0 20px;
@@ -24,25 +41,51 @@
       font-weight: 500;
       border-bottom: 2px solid transparent;
       padding-bottom: 4px;
+      transition: color 0.2s, border-bottom 0.2s;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .nav-links a.active {
-      border-bottom: 2px solid #377dff;
-      color: #377dff;
+      border-bottom: 2px solid #7ec4cf;
+      color: #7ec4cf;
+    }
+    .logout-link {
+      background: #d45a5a;
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-left: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+      border: none;
+    }
+    .logout-link:hover {
+      background-color: #ff8c8c;
+      color: #fff !important;
     }
     .hyperlink-btn {
       display: inline-block;
-      background-color: #377dff;
-      color: #fff;
+      background-color: #7ec4cf;
+      color: #fff;               
       text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 0 24px;           
+      border-radius: 8px;        
       font-size: 1em;
       margin-top: 20px;
       text-align: center;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s, color 0.3s, filter 0.3s;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      border: none;
+      height: 44px;              
+      line-height: 44px;         
+      font-weight: 600;         
+      box-sizing: border-box;
     }
     .hyperlink-btn:hover {
-      background-color: #285bb5;
+      filter: brightness(0.92); 
+      background-color: #7ec4cf;
+      color: #fff;
     }
     .main-content {
       display: flex;
@@ -50,6 +93,7 @@
       justify-content: center;
       margin: 40px auto;
       max-width: 1400px;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .left-column {
       flex: 2;
@@ -61,46 +105,83 @@
       background: #fff;
       border-radius: 16px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
-      padding: 32px 24px;
+      padding: 24px 24px;
       min-width: 400px;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      flex: 1 1 400px;
+      min-width: 340px;
+      max-width: 480px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 380px; 
+      max-height: 380px;
+      overflow: auto;
+      position: relative;
+      box-sizing: border-box;
+      padding-top: 32px;
     }
     .card h2, .form-card h2 {
       margin-top: 0;
+      margin-bottom: 32px;
       font-size: 1.3em;
       color: #184a6a;
       font-weight: 700;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     .form-card form {
       display: flex;
       flex-direction: column;
       gap: 16px;
+      width: 100%;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     form label {
       font-size: 0.9em;
       color: #555;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     form input[type="text"], form input[type="datetime-local"] {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     }
     form button {
-      background-color: #377dff;
-      color: white;
-      padding: 10px 0;
-      font-size: 1.1em;
+      background-color: #6ed89c;
+      color: #fff; /* Make Submit text white */
+      padding: 0 24px;               
+      font-size: 1em;               
       border: none;
-      border-radius: 8px;
+      border-radius: 8px;             
       cursor: pointer;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s, filter 0.3s;
+      height: 44px;                
+      line-height: 44px;              
+      font-weight: 600;             
+      box-sizing: border-box;
+      display: inline-block;
     }
     form button:hover {
-      background-color: #285bb5;
+      background-color: #9cddc1;
+      color: #fff; /* Keep Submit text white on hover */
+      filter: brightness(0.92);     
     }
     .success {
-      color: green;
+      color: #3bb273;
       text-align: center;
       margin-top: 10px;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      min-height: 22px; 
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .right-column {
       flex: 1;
@@ -113,20 +194,97 @@
       font-size: 2.5em;
       font-weight: 400;
       margin: 40px 0 32px 0;
-      text-align: left;
+      text-align: center;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .card .button-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .form-card {
+      border-left: 0px solid #fafafa;
+      padding-left: 32px;
+      padding-right: 32px;
+      max-width: 420px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+      }
+      .form-card {
+        border-left: none;
+        padding-left: 0;
+        border-top: 2px solid #e3e3e3;
+        padding-top: 24px;
+      }
+    }
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 10px;
+        gap: 10px;
+      }
+      .nav-links {
+        gap: 12px;
+      }
+    }
+    .cards-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      align-items: stretch; 
+      margin: 60px auto 0 auto;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .card, .form-card {
+      flex: 1 1 400px;
+      min-width: 340px;
+      max-width: 480px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; 
+      min-height: 380px; 
+      max-height: 380px; 
+      overflow: auto;
+      position: relative;
+      box-sizing: border-box;
+      padding-top: 32px; 
+    }
+    @media (max-width: 1000px) {
+      .cards-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+      }
+      .card, .form-card {
+        max-width: 95vw;
+        min-width: unset;
+        min-height: unset;
+      }
     }
   </style>
 </head>
 <body>
 <!-- Navigation Bar -->
 <div class="navbar">
-  <div style="font-size:1.5em;font-weight:600;color:#377dff;">CareNet</div>
+  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+       alt="CareNet Logo"
+       style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
   <div class="nav-links">
-    <a href="#" class="active">Home</a>
+    <a href="/patientHome" class="active">Home</a>
     <a href="/profile">Profile</a>
     <a href="/assessment">Your Assessments</a>
-    <a id="logout-link" href="/logout" class="logout-link"
-       style="background:#e74c3c;color:#fff;padding:8px 18px;border-radius:8px;margin-left:20px;font-weight:600;">Logout</a>
+    <a id="logout-link" href="/logout" class="logout-link">Logout</a>
   </div>
 </div>
 
@@ -134,49 +292,140 @@
 <div>
   <div style="max-width:1400px;margin:auto;">
     <h1>Welcome to <span style="font-weight:600;">CareNet</span></h1>
-    <div class="main-content">
-      <!-- Left Column -->
-      <div class="left-column">
-        <div class="card">
-          <h2>Patient’s Details</h2>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-            <img th:src="${user.imageUrl}" alt="Profile image" width="90" height="90" style="border-radius:50%;object-fit:cover;margin-bottom:8px;">
-            <div style="font-weight:600;font-size:1.2em;">
-              <span th:text="${user.firstName}">First</span>
-              <span th:text="${user.middleName}">Middle</span>
-              <span th:text="${user.lastName}">Last</span>
-            </div>
-            <div style="color:#444;font-size:1em;">
-              <span th:text="${user.username}">username</span>
-              <span style="color:#888;"> | </span>
-              <span th:text="${user.gender}">gender</span>
-            </div>
+    <div class="cards-container">
+      <div class="card">
+        <h2>Patient’s Details</h2>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <img th:src="${user.imageUrl}" alt="Profile image" width="90" height="90" style="border-radius:50%;object-fit:cover;margin-bottom:8px;">
+          <div style="font-weight:600;font-size:1.2em;">
+            <span th:text="${user.firstName}">First</span>
+            <span th:text="${user.middleName}">Middle</span>
+            <span th:text="${user.lastName}">Last</span>
           </div>
-          <!-- Hyperlinked Buttons -->
+          <div style="color:#444;font-size:1em;">
+            <span th:text="${user.username}">username</span>
+            <span style="color:#888;"> | </span>
+            <span th:text="${user.gender}">gender</span>
+          </div>
+        </div>
+        <div class="button-group">
           <a href="/profile" class="hyperlink-btn">View Profile</a>
           <a href="/assessment" class="hyperlink-btn">Your Assessments</a>
         </div>
       </div>
+      <div class="form-card">
+        <h2>Book an Appointment</h2>
+        <form th:action="@{/doctorAppointment/appointment}" th:object="${patientDTO}" method="post">
+          <label>Name</label>
+          <input type="text" th:field="*{name}" required />
 
-      <!-- Right Column -->
-      <div class="right-column">
-        <!-- Appointment Form -->
-        <div class="form-card">
-          <h2>Book an Appointment</h2>
-          <form th:action="@{/doctorAppointment/appointment}" th:object="${patientDTO}" method="post">
-            <label>Name</label>
-            <input type="text" th:field="*{name}" required />
+          <label>Appointment Date</label>
+          <input type="datetime-local" th:field="*{appointmentDate}" required />
 
-            <label>Appointment Date</label>
-            <input type="datetime-local" th:field="*{appointmentDate}" required />
-
-            <button type="submit">Submit</button>
-            <div class="success" th:if="${success}" th:text="${success}"></div>
-          </form>
-        </div>
+          <button type="submit">Submit</button>
+          <div class="success" th:if="${success}" th:text="${success}"></div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Create custom modal
+        var modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.25)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '9999';
+
+        // Add keyframes for pop-in, pop-out, and fade-out animation
+        var style = document.createElement('style');
+        style.innerHTML = `
+          @keyframes popInModalBox {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes popOutModalBox {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.7); opacity: 0; }
+          }
+          @keyframes fadeOutBody {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+
+        var box = document.createElement('div');
+        box.style.background = '#fff';
+        box.style.padding = '32px 24px';
+        box.style.borderRadius = '12px';
+        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+        box.style.textAlign = 'center';
+        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
+
+        var yesBtn = document.createElement('button');
+        yesBtn.textContent = 'Yes';
+        yesBtn.style.background = '#d45a5a';
+        yesBtn.style.color = '#fff';
+        yesBtn.style.border = 'none';
+        yesBtn.style.borderRadius = '8px';
+        yesBtn.style.padding = '10px 28px';
+        yesBtn.style.margin = '0 12px';
+        yesBtn.style.fontWeight = '600';
+        yesBtn.style.fontSize = '1em';
+        yesBtn.style.cursor = 'pointer';
+        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        yesBtn.addEventListener('click', function() {
+          // Animate body fade out, then redirect
+          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
+          document.body.style.animationFillMode = 'forwards';
+          setTimeout(function() {
+            window.location.href = logoutLink.getAttribute('href');
+          }, 420);
+        });
+
+        var noBtn = document.createElement('button');
+        noBtn.textContent = 'No';
+        noBtn.style.background = '#7ec4cf';
+        noBtn.style.color = '#fff';
+        noBtn.style.border = 'none';
+        noBtn.style.borderRadius = '8px';
+        noBtn.style.padding = '10px 28px';
+        noBtn.style.margin = '0 12px';
+        noBtn.style.fontWeight = '600';
+        noBtn.style.fontSize = '1em';
+        noBtn.style.cursor = 'pointer';
+        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        noBtn.addEventListener('click', function() {
+          // Pop-out animation
+          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+          box.addEventListener('animationend', function handler() {
+            document.body.removeChild(modal);
+            box.removeEventListener('animationend', handler);
+          });
+        });
+
+        box.appendChild(yesBtn);
+        box.appendChild(noBtn);
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+      });
+    }
+  });
+</script>
 </body>
 </html>

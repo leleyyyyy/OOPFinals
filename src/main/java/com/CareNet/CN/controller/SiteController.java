@@ -6,6 +6,7 @@ import com.CareNet.CN.model.AppointmentSetter;
 import com.CareNet.CN.model.User;
 import com.CareNet.CN.repository.PatientAssessmentRepository;
 import com.CareNet.CN.repository.UserRepository;
+import com.CareNet.CN.service.PatientAssessmentService;
 import com.CareNet.CN.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,10 @@ public class SiteController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private PatientAssessmentService patientAssessmentService;
+
 
     @GetMapping("/lobby")
     public String showLobbyPage() {
@@ -84,9 +89,27 @@ public class SiteController {
 
 
     @GetMapping("/doctorHome")
-    public String showLobby() {
-        return "doctorHome";  // Redirects to lobby.html
+    public String showDoctorHome(@RequestParam(value = "username", required = false) String username, Model model) {
+        // Fetch patients with the role "ROLE_PATIENT" directly from the database
+        List<User> patients = userRepository.findByRole("ROLE_PATIENT");
+
+        // Debugging log (optional, can be removed)
+        System.out.println("Patients fetched: " + patients);
+
+        // Add the patients list to the model
+        model.addAttribute("patients", patients);
+
+        // If a username is provided in the search bar, fetch and add the assessments
+        if (username != null && !username.isEmpty()) {
+            List<PatientAssessment> assessments = patientAssessmentService.getAssessmentsByUsername(username);
+            model.addAttribute("assessments", assessments);
+            model.addAttribute("searchedUsername", username);
+        }
+
+        // Return the doctorHome view
+        return "doctorHome";
     }
+
 
     // Redirect to doctor registration page
 
