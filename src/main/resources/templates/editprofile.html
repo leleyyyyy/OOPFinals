@@ -178,11 +178,25 @@
                 gap: 12px;
             }
         }
+        #fade-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #4E80A0;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+  z-index: 10000;
+}
     </style>
 </head>
 <body>
+<!-- Navigation Bar -->
 <div class="navbar">
-  <div class="brand">CareNet</div>
+  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+       alt="CareNet Logo"
+       class="brand-logo" 
+       style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
   <div class="nav-links">
     <a href="/patientHome">Home</a>
     <a href="/profile" class="active">Profile</a>
@@ -239,6 +253,7 @@
         </div>
     </form>
 </div>
+<div id="fade-overlay"></div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
@@ -270,10 +285,6 @@
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0.7); opacity: 0; }
           }
-          @keyframes fadeOutBody {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
         `;
         document.head.appendChild(style);
 
@@ -299,13 +310,20 @@
         yesBtn.style.fontSize = '1em';
         yesBtn.style.cursor = 'pointer';
         yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        yesBtn.style.display = 'inline-flex';
+        yesBtn.style.alignItems = 'center';
+        yesBtn.style.justifyContent = 'center';
+        yesBtn.style.height = '44px';
+
         yesBtn.addEventListener('click', function() {
-          // Animate body fade out, then redirect
-          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
-          document.body.style.animationFillMode = 'forwards';
+          // Fade out overlay with #4E80A0 color, then redirect
+          var overlay = document.getElementById('fade-overlay');
+          overlay.style.background = '#4E80A0';
+          overlay.style.pointerEvents = 'auto';
+          overlay.style.opacity = '1';
           setTimeout(function() {
             window.location.href = logoutLink.getAttribute('href');
-          }, 420);
+          }, 500);
         });
 
         var noBtn = document.createElement('button');
@@ -320,6 +338,10 @@
         noBtn.style.fontSize = '1em';
         noBtn.style.cursor = 'pointer';
         noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        noBtn.style.display = 'inline-flex';
+        noBtn.style.alignItems = 'center';
+        noBtn.style.justifyContent = 'center';
+        noBtn.style.height = '44px';
         noBtn.addEventListener('click', function() {
           // Pop-out animation
           box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
@@ -329,12 +351,44 @@
           });
         });
 
-        box.appendChild(yesBtn);
-        box.appendChild(noBtn);
+        // Create a container for the buttons
+        var btnContainer = document.createElement('div');
+        btnContainer.style.display = 'flex';
+        btnContainer.style.justifyContent = 'center';
+        btnContainer.style.gap = '16px';
+        btnContainer.style.marginTop = '8px';
+
+        // Append buttons to the container
+        btnContainer.appendChild(yesBtn);
+        btnContainer.appendChild(noBtn);
+
+        // Append the container to the modal box
+        box.appendChild(btnContainer);
+
         modal.appendChild(box);
         document.body.appendChild(modal);
       });
     }
+  });
+
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.getElementById('fade-overlay').style.opacity = '0';
+    }, 80);
+
+    // Fade out on navigation for main nav links (except logout)
+    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.background = '#4E80A0';
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
+    });
   });
 </script>
 </body>

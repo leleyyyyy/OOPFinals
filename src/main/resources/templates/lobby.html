@@ -90,6 +90,17 @@
         url('https://media.discordapp.net/attachments/1370382300906524692/1370382429927374950/medical-equipment-desk-with-copy-space.jpg?ex=681f4b97&is=681dfa17&hm=4edc8c9fe55a5439cb4c08c56850f5f2c22b56d16854b0faf818e7c694c3ee66&=&format=webp&width=756&height=504') center center / cover no-repeat fixed;
     }
 
+    #fade-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #4E80A0; /* Changed from #fff to #4E80A0 */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+      z-index: 10000;
+    }
+
     @media (max-width: 800px) {
       .right-panel {
         width: 100%;
@@ -107,11 +118,35 @@
     <div class="container">
       <h1>Welcome to the<br />Carenet Lobby</h1>
       <div class="button-container">
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
+        <a href="/login" class="fade-link">Login</a>
+        <a href="/register" class="fade-link">Register</a>
       </div>
     </div>
   </div>
   <div class="background-image"></div>
+  <div id="fade-overlay"></div>
+  <script>
+    // Fade in on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      var overlay = document.getElementById('fade-overlay');
+      overlay.style.opacity = '1';
+      setTimeout(function() {
+        overlay.style.opacity = '0';
+      }, 80);
+    });
+
+    // Only handle fade for lobby navigation
+    document.querySelectorAll('.fade-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
+    });
+  </script>
 </body>
 </html>

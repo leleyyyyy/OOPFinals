@@ -272,6 +272,16 @@
         min-height: unset;
       }
     }
+    #fade-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #4E80A0;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+      z-index: 10000;
+    }
   </style>
 </head>
 <body>
@@ -329,6 +339,28 @@
     </div>
   </div>
 </div>
+<div id="fade-overlay"></div>
+<script>
+  // Simple fade in on page load
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.getElementById('fade-overlay').style.opacity = '0';
+    }, 80);
+
+    // Simple fade out on navigation for main nav links (except logout)
+    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
+    });
+  });
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
@@ -364,6 +396,10 @@
             0% { opacity: 1; }
             100% { opacity: 0; }
           }
+          @keyframes fadeOverlayIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+          }
         `;
         document.head.appendChild(style);
 
@@ -390,12 +426,30 @@
         yesBtn.style.cursor = 'pointer';
         yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
         yesBtn.addEventListener('click', function() {
-          // Animate body fade out, then redirect
-          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
-          document.body.style.animationFillMode = 'forwards';
+          // Create overlay for fade-out
+          var overlay = document.createElement('div');
+          overlay.id = 'fade-overlay';
+          overlay.style.position = 'fixed';
+          overlay.style.top = '0';
+          overlay.style.left = '0';
+          overlay.style.width = '100vw';
+          overlay.style.height = '100vh';
+          overlay.style.background = '#4E80A0';
+          overlay.style.opacity = '0';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.transition = 'opacity 0.48s cubic-bezier(.42,1.7,.62,1)';
+          overlay.style.zIndex = '10000';
+          document.body.appendChild(overlay);
+
+          // Animate overlay in
+          setTimeout(function() {
+            overlay.style.opacity = '1';
+          }, 10);
+
+          // After fade, redirect
           setTimeout(function() {
             window.location.href = logoutLink.getAttribute('href');
-          }, 420);
+          }, 500);
         });
 
         var noBtn = document.createElement('button');

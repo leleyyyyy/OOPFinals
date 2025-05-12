@@ -86,13 +86,17 @@
       background: #f7fbff;
       border-radius: 12px;
       overflow: hidden;
+      /* Add border for outer gridline */
+      border: 1px solid #e0e0e0;
     }
     th, td {
       padding: 14px 10px;
       text-align: center;
+      /* Add border for gridlines */
+      border: 1px solid #e0e0e0;
     }
     th {
-      background: #9ce8f5;
+      background: #a2cbec;
       color: #fff;
       font-weight: 600;
       font-size: 1.05em;
@@ -124,6 +128,16 @@
     }
     .back-btn:hover {
       background: #44c6da;
+    }
+    #fade-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #4E80A0;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+      z-index: 10000;
     }
     @media (max-width: 600px) {
       .navbar {
@@ -185,103 +199,118 @@
       <a href="/patientHome" class="back-btn">Back to Home</a>
     </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var logoutLink = document.getElementById('logout-link');
-      if (logoutLink) {
-        logoutLink.addEventListener('click', function(event) {
-          event.preventDefault();
-          // Create custom modal
-          var modal = document.createElement('div');
-          modal.style.position = 'fixed';
-          modal.style.top = '0';
-          modal.style.left = '0';
-          modal.style.width = '100vw';
-          modal.style.height = '100vh';
-          modal.style.background = 'rgba(0,0,0,0.25)';
-          modal.style.display = 'flex';
-          modal.style.alignItems = 'center';
-          modal.style.justifyContent = 'center';
-          modal.style.zIndex = '9999';
+  <div id="fade-overlay"></div>
+<script>
+  // Fade in on page load
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.getElementById('fade-overlay').style.opacity = '0';
+    }, 80);
 
-          // Add keyframes for pop-in, pop-out, and fade-out animation
-          var style = document.createElement('style');
-          style.innerHTML = `
-            @keyframes popInModalBox {
-              0% { transform: scale(0.7); opacity: 0; }
-              80% { transform: scale(1.05); opacity: 1; }
-              100% { transform: scale(1); opacity: 1; }
-            }
-            @keyframes popOutModalBox {
-              0% { transform: scale(1); opacity: 1; }
-              100% { transform: scale(0.7); opacity: 0; }
-            }
-            @keyframes fadeOutBody {
-              0% { opacity: 1; }
-              100% { opacity: 0; }
-            }
-          `;
-          document.head.appendChild(style);
-
-          var box = document.createElement('div');
-          box.style.background = '#fff';
-          box.style.padding = '32px 24px';
-          box.style.borderRadius = '12px';
-          box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
-          box.style.textAlign = 'center';
-          box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-          box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
-          box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
-
-          var yesBtn = document.createElement('button');
-          yesBtn.textContent = 'Yes';
-          yesBtn.style.background = '#d45a5a';
-          yesBtn.style.color = '#fff';
-          yesBtn.style.border = 'none';
-          yesBtn.style.borderRadius = '8px';
-          yesBtn.style.padding = '10px 28px';
-          yesBtn.style.margin = '0 12px';
-          yesBtn.style.fontWeight = '600';
-          yesBtn.style.fontSize = '1em';
-          yesBtn.style.cursor = 'pointer';
-          yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-          yesBtn.addEventListener('click', function() {
-            // Animate body fade out, then redirect
-            document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
-            document.body.style.animationFillMode = 'forwards';
-            setTimeout(function() {
-              window.location.href = logoutLink.getAttribute('href');
-            }, 420);
-          });
-
-          var noBtn = document.createElement('button');
-          noBtn.textContent = 'No';
-          noBtn.style.background = '#7ec4cf';
-          noBtn.style.color = '#fff';
-          noBtn.style.border = 'none';
-          noBtn.style.borderRadius = '8px';
-          noBtn.style.padding = '10px 28px';
-          noBtn.style.margin = '0 12px';
-          noBtn.style.fontWeight = '600';
-          noBtn.style.fontSize = '1em';
-          noBtn.style.cursor = 'pointer';
-          noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-          noBtn.addEventListener('click', function() {
-            // Pop-out animation
-            box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
-            box.addEventListener('animationend', function handler() {
-              document.body.removeChild(modal);
-              box.removeEventListener('animationend', handler);
-            });
-          });
-
-          box.appendChild(yesBtn);
-          box.appendChild(noBtn);
-          modal.appendChild(box);
-          document.body.appendChild(modal);
-        });
-      }
+    // Fade out on navigation for main nav links (except logout)
+    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
     });
-  </script>
-</body>
-</html>
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Create custom modal
+        var modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.25)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '9999';
+
+        // Add keyframes for pop-in, pop-out, and fade-out animation
+        var style = document.createElement('style');
+        style.innerHTML = `
+          @keyframes popInModalBox {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes popOutModalBox {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.7); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+
+        var box = document.createElement('div');
+        box.style.background = '#fff';
+        box.style.padding = '32px 24px';
+        box.style.borderRadius = '12px';
+        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+        box.style.textAlign = 'center';
+        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
+
+        var yesBtn = document.createElement('button');
+        yesBtn.textContent = 'Yes';
+        yesBtn.style.background = '#d45a5a'; // This is red
+        yesBtn.style.color = '#fff';
+        yesBtn.style.border = 'none';
+        yesBtn.style.borderRadius = '8px';
+        yesBtn.style.padding = '10px 28px';
+        yesBtn.style.margin = '0 12px';
+        yesBtn.style.fontWeight = '600';
+        yesBtn.style.fontSize = '1em';
+        yesBtn.style.cursor = 'pointer';
+        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        yesBtn.addEventListener('click', function() {
+          var overlay = document.getElementById('fade-overlay');
+          overlay.style.background = '#4E80A0';
+          overlay.style.pointerEvents = 'auto';
+          overlay.style.opacity = '1';
+          setTimeout(function() {
+            window.location.href = logoutLink.getAttribute('href');
+          }, 500);
+        });
+
+        var noBtn = document.createElement('button');
+        noBtn.textContent = 'No';
+        noBtn.style.background = '#7ec4cf';
+        noBtn.style.color = '#fff';
+        noBtn.style.border = 'none';
+        noBtn.style.borderRadius = '8px';
+        noBtn.style.padding = '10px 28px';
+        noBtn.style.margin = '0 12px';
+        noBtn.style.fontWeight = '600';
+        noBtn.style.fontSize = '1em';
+        noBtn.style.cursor = 'pointer';
+        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+        noBtn.addEventListener('click', function() {
+          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+          box.addEventListener('animationend', function handler() {
+            document.body.removeChild(modal);
+            box.removeEventListener('animationend', handler);
+          });
+        });
+
+        box.appendChild(yesBtn);
+        box.appendChild(noBtn);
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+      });
+    }
+  });
+</script>

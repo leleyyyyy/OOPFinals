@@ -134,7 +134,7 @@
             max-width: 140px;
         }
         th {
-            background: #9ce8f5;
+            background: #a2cbec;
             color: #fff;
             font-weight: 600;
             font-size: 1.05em;
@@ -166,6 +166,16 @@
         .back-btn:hover {
             background: #5bb3c7;
         }
+        #fade-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #4E80A0;
+            opacity: 1;
+            pointer-events: none;
+            transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+            z-index: 10000;
+        }
         @media (max-width: 600px) {
             .navbar {
                 flex-direction: column;
@@ -184,8 +194,12 @@
     </style>
 </head>
 <body>
+<!-- Navigation Bar -->
 <div class="navbar">
-    <div class="brand">CareNet</div>
+  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+       alt="CareNet Logo"
+       class="brand-logo" 
+       style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
     <div class="nav-links">
         <a href="/doctorHome">Home</a>
         <a href="/register/doctor" class="active">Dashboard</a>
@@ -230,7 +244,28 @@
         <a th:href="@{/doctorHome}" class="back-btn">Back</a>
     </div>
 </div>
+<div id="fade-overlay"></div>
 <script>
+  // Fade in on page load
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.getElementById('fade-overlay').style.opacity = '0';
+    }, 80);
+
+    // Fade out on navigation for main nav links (except logout)
+    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
+    });
+  });
+
   document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
@@ -261,10 +296,6 @@
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0.7); opacity: 0; }
           }
-          @keyframes fadeOutBody {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
         `;
         document.head.appendChild(style);
 
@@ -291,12 +322,13 @@
         yesBtn.style.cursor = 'pointer';
         yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
         yesBtn.addEventListener('click', function() {
-          // Animate body fade out, then redirect
-          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
-          document.body.style.animationFillMode = 'forwards';
+          var overlay = document.getElementById('fade-overlay');
+          overlay.style.background = '#4E80A0';
+          overlay.style.pointerEvents = 'auto';
+          overlay.style.opacity = '1';
           setTimeout(function() {
             window.location.href = logoutLink.getAttribute('href');
-          }, 420);
+          }, 500);
         });
 
         var noBtn = document.createElement('button');
@@ -312,7 +344,6 @@
         noBtn.style.cursor = 'pointer';
         noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
         noBtn.addEventListener('click', function() {
-          // Pop-out animation
           box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
           box.addEventListener('animationend', function handler() {
             document.body.removeChild(modal);
@@ -328,5 +359,3 @@
     }
   });
 </script>
-</body>
-</html>

@@ -18,6 +18,8 @@
             background-size: cover;
             background-position: center;
             overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(.42,1.7,.62,1);
         }
         .card {
             background: #fff;
@@ -32,6 +34,13 @@
             box-sizing: border-box;
             margin: 32px 8px;
             font-family: 'Poppins', sans-serif;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s 0.2s cubic-bezier(.42,1.7,.62,1), transform 0.5s 0.2s cubic-bezier(.42,1.7,.62,1);
+        }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .logo {
             width: 60px;
@@ -187,6 +196,16 @@
             color: #5a9de0;
             font-family: 'Poppins', sans-serif;
         }
+        #fade-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #4E80A0;
+            opacity: 1;
+            pointer-events: none;
+            transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+            z-index: 10000;
+        }
         @media (max-width: 800px) {
             .card {
                 max-width: 98vw;
@@ -221,6 +240,7 @@
     </style>
 </head>
 <body>
+    <div id="fade-overlay"></div>
     <div class="card">
         <div class="logo">CN</div>
         <h1>Create Account</h1>
@@ -278,5 +298,17 @@
             Already have an account? <a href="/login">Log in</a>
         </div>
     </div>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        document.body.style.opacity = '1';
+        setTimeout(function() {
+          document.querySelector('.card').classList.add('visible');
+        }, 200);
+        setTimeout(function() {
+          document.getElementById('fade-overlay').style.opacity = '0';
+        }, 80); // slight delay for smoothness
+      });
+      // No overlay fade-in on navigation between login/register
+    </script>
 </body>
 </html>

@@ -269,6 +269,16 @@
       border-radius: 12px;
       margin-top: 10px;
     }
+    #fade-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #4E80A0;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
+      z-index: 10000;
+    }
     @media (max-width: 1200px) {
       .dashboard-flex {
         flex-direction: column;
@@ -309,8 +319,7 @@
        style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
   <div class="nav-links">
     <a href="/patientHome" class="active">Home</a>
-    <a href="/profile">Profile</a>
-    <a href="/assessment">Your Assessments</a>
+    <a href="/register/doctor">Dashboard</a>
     <a id="logout-link" href="/logout" class="logout-link">Logout</a>
   </div>
 </div>
@@ -406,7 +415,28 @@
   </div>
 
 </div>
+<div id="fade-overlay"></div>
 <script>
+  // Fade in on page load
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      document.getElementById('fade-overlay').style.opacity = '0';
+    }, 80);
+
+    // Fade out on navigation for main nav links (except logout)
+    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var overlay = document.getElementById('fade-overlay');
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(function() {
+          window.location.href = link.getAttribute('href');
+        }, 480);
+      });
+    });
+  });
+
   document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
@@ -437,10 +467,6 @@
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0.7); opacity: 0; }
           }
-          @keyframes fadeOutBody {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
         `;
         document.head.appendChild(style);
 
@@ -467,12 +493,13 @@
         yesBtn.style.cursor = 'pointer';
         yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
         yesBtn.addEventListener('click', function() {
-          // Animate body fade out, then redirect
-          document.body.style.animation = 'fadeOutBody 0.45s cubic-bezier(.42,1.7,.62,1)';
-          document.body.style.animationFillMode = 'forwards';
+          var overlay = document.getElementById('fade-overlay');
+          overlay.style.background = '#4E80A0';
+          overlay.style.pointerEvents = 'auto';
+          overlay.style.opacity = '1';
           setTimeout(function() {
             window.location.href = logoutLink.getAttribute('href');
-          }, 420);
+          }, 500);
         });
 
         var noBtn = document.createElement('button');
@@ -488,7 +515,6 @@
         noBtn.style.cursor = 'pointer';
         noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
         noBtn.addEventListener('click', function() {
-          // Pop-out animation
           box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
           box.addEventListener('animationend', function handler() {
             document.body.removeChild(modal);
