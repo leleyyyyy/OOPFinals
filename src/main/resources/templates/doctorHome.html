@@ -279,6 +279,11 @@
       transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
       z-index: 10000;
     }
+    .assessment-table-container table,
+    .assessment-table-container th,
+    .assessment-table-container td {
+      font-size: 0.88em;
+    }
     @media (max-width: 1200px) {
       .dashboard-flex {
         flex-direction: column;
@@ -313,13 +318,14 @@
 <body>
 <!-- Navigation Bar -->
 <div class="navbar">
-  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+  <img src="https://i.imgur.com/xXwt1l2.png"
        alt="CareNet Logo"
        class="brand-logo" 
        style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
   <div class="nav-links">
     <a href="/patientHome" class="active">Home</a>
     <a href="/register/doctor">Dashboard</a>
+    <a href="/addAssessment">Assessment</a>
     <a id="logout-link" href="/logout" class="logout-link">Logout</a>
   </div>
 </div>
@@ -334,6 +340,7 @@
       <h1 style="font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">Welcome, Doctor</h1>
       <p style="font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;">View and Manage Patient Profiles:</p>
       <a th:href="@{/register/doctor}" class="dashboard-btn">Go to Dashboard</a>
+      <a th:href="@{/addAssessment}" class="dashboard-btn" style="margin-top:18px;background-color:#7ec4cf;">Add Assessment</a>
     </div>
 
     <!-- Search Assessments Card -->
@@ -354,6 +361,7 @@
                 <th>Height</th>
                 <th>Weight</th>
                 <th>Notes</th>
+                <th>Symptoms</th>
                 <th>Treatment Plan</th>
               </tr>
             </thead>
@@ -364,6 +372,7 @@
                 <td th:text="${assessment.height}"></td>
                 <td th:text="${assessment.weight}"></td>
                 <td th:text="${assessment.notes}"></td>
+                <td th:text="${assessment.symptomsOrNotes}"></td>
                 <td th:text="${assessment.treatmentPlan}"></td>
               </tr>
             </tbody>
@@ -388,7 +397,6 @@
             <th>Email</th>
             <th>Emergency Contact</th>
             <th>Blood Type</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -403,11 +411,6 @@
             <td th:text="${patient.email}"></td>
             <td th:text="${patient.emergencyContact ?: 'Not Available'}"></td>
             <td th:text="${patient.bloodType ?: 'Unknown'}"></td>
-            <td>
-              <form th:action="@{/addAssessment}" method="get" style="display:inline;">
-                <button type="submit" class="manage-btn">Assess</button>
-              </form>
-            </td>
           </tr>
         </tbody>
       </table>

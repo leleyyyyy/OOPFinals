@@ -5,6 +5,27 @@
   <!-- Add Poppins font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
   <style>
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding-bottom: 10;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .page-content {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+    footer {
+      margin-top: auto !important;
+      flex-shrink: 0;
+    }
+
     body {
       background: linear-gradient(135deg, #e3f0ff 0%, #44c6da 100%);
       background-repeat: no-repeat;
@@ -285,310 +306,338 @@
   </style>
 </head>
 <body>
-<!-- Navigation Bar -->
-<div class="navbar">
-  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
-       alt="CareNet Logo"
-       style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
-  <div class="nav-links">
-    <a href="/patientHome" class="active">Home</a>
-    <a href="/profile">Profile</a>
-    <a href="/assessment">Your Assessments</a>
-    <a id="logout-link" href="/logout" class="logout-link">Logout</a>
-  </div>
-</div>
-
-<!-- Main Content -->
-<div>
-  <div style="max-width:1400px;margin:auto;">
-    <h1>Welcome to <span style="font-weight:600;">CareNet</span></h1>
-    <div class="cards-container">
-      <div class="card">
-        <h2>Patient’s Details</h2>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-          <img th:src="${user.imageUrl}" alt="Profile image" width="90" height="90" style="border-radius:50%;object-fit:cover;margin-bottom:8px;">
-          <div style="font-weight:600;font-size:1.2em;">
-            <span th:text="${user.firstName}">First</span>
-            <span th:text="${user.middleName}">Middle</span>
-            <span th:text="${user.lastName}">Last</span>
-          </div>
-          <div style="color:#444;font-size:1em;">
-            <span th:text="${user.username}">username</span>
-            <span style="color:#888;"> | </span>
-            <span th:text="${user.gender}">gender</span>
-          </div>
-        </div>
-        <div class="button-group">
-          <a href="/profile" class="hyperlink-btn">View Profile</a>
-          <a href="/assessment" class="hyperlink-btn">Your Assessments</a>
-        </div>
-      </div>
-      <div class="form-card">
-        <h2>Book an Appointment</h2>
-        <form th:action="@{/doctorAppointment/appointment}" th:object="${patientDTO}" method="post">
-          <label>Name</label>
-          <input type="text" th:field="*{name}" required />
-
-          <label>Appointment Date</label>
-          <input type="datetime-local" th:field="*{appointmentDate}" required />
-
-          <button type="submit">Submit</button>
-          <div class="success" th:if="${success}" th:text="${success}"></div>
-        </form>
+  <div class="page-content">
+    <!-- Navigation Bar -->
+    <div class="navbar">
+      <img src="https://i.imgur.com/xXwt1l2.png"
+           alt="CareNet Logo"
+           style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
+      <div class="nav-links">
+        <a href="/patientHome" class="active">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/assessment">Your Assessments</a>
+        <a id="logout-link" href="/logout" class="logout-link">Logout</a>
       </div>
     </div>
-  </div>
-</div>
-<div id="fade-overlay"></div>
-<script>
-  // Simple fade in on page load
-  window.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-      document.getElementById('fade-overlay').style.opacity = '0';
-    }, 80);
 
-    // Simple fade out on navigation for main nav links (except logout)
-    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        var overlay = document.getElementById('fade-overlay');
-        overlay.style.pointerEvents = 'auto';
-        overlay.style.opacity = '1';
+    <!-- Main Content -->
+    <div>
+      <div style="max-width:1400px;margin:auto;">
+        <h1>Welcome to <span style="font-weight:600;">CareNet</span></h1>
+        <div class="cards-container">
+          <div class="card">
+            <h2>Patient’s Details</h2>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <img th:src="${user.imageUrl}" alt="Profile image" width="90" height="90" style="border-radius:50%;object-fit:cover;margin-bottom:8px;">
+              <div style="font-weight:600;font-size:1.2em;">
+                <span th:text="${user.firstName}">First</span>
+                <span th:text="${user.middleName}">Middle</span>
+                <span th:text="${user.lastName}">Last</span>
+              </div>
+              <div style="color:#444;font-size:1em;">
+                <span th:text="${user.username}">username</span>
+                <span style="color:#888;"> | </span>
+                <span th:text="${user.gender}">gender</span>
+              </div>
+            </div>
+            <div class="button-group">
+              <a href="/profile" class="hyperlink-btn">View Profile</a>
+              <a href="/assessment" class="hyperlink-btn">Your Assessments</a>
+            </div>
+          </div>
+          <div class="form-card">
+            <h2>Book an Appointment</h2>
+            <form th:action="@{/doctorAppointment/appointment}" th:object="${patientDTO}" method="post">
+              <label>Name</label>
+              <input type="text" th:field="*{name}" required />
+
+              <label>Appointment Date</label>
+              <input type="datetime-local" th:field="*{appointmentDate}" required />
+
+              <button type="submit">Submit</button>
+              <div class="success" th:if="${success}" th:text="${success}"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="fade-overlay"></div>
+    <script>
+      // Simple fade in on page load
+      window.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
-          window.location.href = link.getAttribute('href');
-        }, 480);
-      });
-    });
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var logoutLink = document.getElementById('logout-link');
-    if (logoutLink) {
-      logoutLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        // Create custom modal
-        var modal = document.createElement('div');
-        modal.style.position = 'fixed';
-        modal.style.top = '0';
-        modal.style.left = '0';
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.25)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = '9999';
+          document.getElementById('fade-overlay').style.opacity = '0';
+        }, 80);
 
-        // Add keyframes for pop-in, pop-out, and fade-out animation
-        var style = document.createElement('style');
-        style.innerHTML = `
-          @keyframes popInModalBox {
-            0% { transform: scale(0.7); opacity: 0; }
-            80% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-          @keyframes popOutModalBox {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0.7); opacity: 0; }
-          }
-          @keyframes fadeOutBody {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
-          @keyframes fadeOverlayIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-          }
-        `;
-        document.head.appendChild(style);
-
-        var box = document.createElement('div');
-        box.style.background = '#fff';
-        box.style.padding = '32px 24px';
-        box.style.borderRadius = '12px';
-        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
-        box.style.textAlign = 'center';
-        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
-        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
-
-        var yesBtn = document.createElement('button');
-        yesBtn.textContent = 'Yes';
-        yesBtn.style.background = '#d45a5a';
-        yesBtn.style.color = '#fff';
-        yesBtn.style.border = 'none';
-        yesBtn.style.borderRadius = '8px';
-        yesBtn.style.padding = '10px 28px';
-        yesBtn.style.margin = '0 12px';
-        yesBtn.style.fontWeight = '600';
-        yesBtn.style.fontSize = '1em';
-        yesBtn.style.cursor = 'pointer';
-        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        yesBtn.addEventListener('click', function() {
-          // Create overlay for fade-out
-          var overlay = document.createElement('div');
-          overlay.id = 'fade-overlay';
-          overlay.style.position = 'fixed';
-          overlay.style.top = '0';
-          overlay.style.left = '0';
-          overlay.style.width = '100vw';
-          overlay.style.height = '100vh';
-          overlay.style.background = '#4E80A0';
-          overlay.style.opacity = '0';
-          overlay.style.pointerEvents = 'none';
-          overlay.style.transition = 'opacity 0.48s cubic-bezier(.42,1.7,.62,1)';
-          overlay.style.zIndex = '10000';
-          document.body.appendChild(overlay);
-
-          // Animate overlay in
-          setTimeout(function() {
+        // Simple fade out on navigation for main nav links (except logout)
+        document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var overlay = document.getElementById('fade-overlay');
+            overlay.style.pointerEvents = 'auto';
             overlay.style.opacity = '1';
-          }, 10);
-
-          // After fade, redirect
-          setTimeout(function() {
-            window.location.href = logoutLink.getAttribute('href');
-          }, 500);
-        });
-
-        var noBtn = document.createElement('button');
-        noBtn.textContent = 'No';
-        noBtn.style.background = '#7ec4cf';
-        noBtn.style.color = '#fff';
-        noBtn.style.border = 'none';
-        noBtn.style.borderRadius = '8px';
-        noBtn.style.padding = '10px 28px';
-        noBtn.style.margin = '0 12px';
-        noBtn.style.fontWeight = '600';
-        noBtn.style.fontSize = '1em';
-        noBtn.style.cursor = 'pointer';
-        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        noBtn.addEventListener('click', function() {
-          // Pop-out animation
-          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
-          box.addEventListener('animationend', function handler() {
-            document.body.removeChild(modal);
-            box.removeEventListener('animationend', handler);
+            setTimeout(function() {
+              window.location.href = link.getAttribute('href');
+            }, 480);
           });
         });
-
-        box.appendChild(yesBtn);
-        box.appendChild(noBtn);
-        modal.appendChild(box);
-        document.body.appendChild(modal);
       });
-    }
-  });
-</script>
-<script th:inline="javascript">
-  // Show profile setup popup if needed
-  window.addEventListener('DOMContentLoaded', function() {
-    var needsProfileSetup = /*[[${user.firstName == null or #strings.isEmpty(user.firstName)
-      or user.lastName == null or #strings.isEmpty(user.lastName)
-      or user.middleName == null or #strings.isEmpty(user.middleName)
-      or user.phoneNumber == null or #strings.isEmpty(user.phoneNumber)
-      or user.email == null or #strings.isEmpty(user.email)
-      or user.gender == null or #strings.isEmpty(user.gender)
-      or user.birthday == null
-      or user.bloodType == null or #strings.isEmpty(user.bloodType)
-      or user.emergencyContact == null or #strings.isEmpty(user.emergencyContact)
-      or user.imageUrl == null or #strings.isEmpty(user.imageUrl)}]]*/ false;
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+          logoutLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            // Create custom modal
+            var modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.25)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = '9999';
 
-    if (needsProfileSetup) {
-      // Create modal overlay
-      var modal = document.createElement('div');
-      modal.style.position = 'fixed';
-      modal.style.top = '0';
-      modal.style.left = '0';
-      modal.style.width = '100vw';
-      modal.style.height = '100vh';
-      modal.style.background = 'rgba(0,0,0,0.25)';
-      modal.style.display = 'flex';
-      modal.style.alignItems = 'center';
-      modal.style.justifyContent = 'center';
-      modal.style.zIndex = '10001';
+            // Add keyframes for pop-in, pop-out, and fade-out animation
+            var style = document.createElement('style');
+            style.innerHTML = `
+              @keyframes popInModalBox {
+                0% { transform: scale(0.7); opacity: 0; }
+                80% { transform: scale(1.05); opacity: 1; }
+                100% { transform: scale(1); opacity: 1; }
+              }
+              @keyframes popOutModalBox {
+                0% { transform: scale(1); opacity: 1; }
+                100% { transform: scale(0.7); opacity: 0; }
+              }
+              @keyframes fadeOutBody {
+                0% { opacity: 1; }
+                100% { opacity: 0; }
+              }
+              @keyframes fadeOverlayIn {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+              }
+            `;
+            document.head.appendChild(style);
 
-      // Modal box
-      var box = document.createElement('div');
-      box.style.background = '#fff';
-      box.style.padding = '32px 24px';
-      box.style.borderRadius = '12px';
-      box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
-      box.style.textAlign = 'center';
-      box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-      box.style.maxWidth = '90vw';
-      box.style.minWidth = '320px';
-      box.innerHTML = `
-        <div style="font-size:1.1em; margin-bottom:24px;">
-          <b>Complete your profile!</b><br>
-          It looks like you haven't set up your profile yet.<br>
-          You can set it up now:
-        </div>
-      `;
+            var box = document.createElement('div');
+            box.style.background = '#fff';
+            box.style.padding = '32px 24px';
+            box.style.borderRadius = '12px';
+            box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+            box.style.textAlign = 'center';
+            box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+            box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
 
-      // Edit Profile button
-      var editBtn = document.createElement('a');
-      editBtn.href = '/profile/edit';
-      editBtn.textContent = 'Set Up Profile';
-      editBtn.style.background = '#377dff';
-      editBtn.style.color = '#fff';
-      editBtn.style.border = 'none';
-      editBtn.style.borderRadius = '8px';
-      editBtn.style.padding = '10px 28px';
-      editBtn.style.fontWeight = '600';
-      editBtn.style.fontSize = '1em';
-      editBtn.style.cursor = 'pointer';
-      editBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-      editBtn.style.textDecoration = 'none';
-      editBtn.style.margin = '0 12px';
+            var yesBtn = document.createElement('button');
+            yesBtn.textContent = 'Yes';
+            yesBtn.style.background = '#d45a5a';
+            yesBtn.style.color = '#fff';
+            yesBtn.style.border = 'none';
+            yesBtn.style.borderRadius = '8px';
+            yesBtn.style.padding = '10px 28px';
+            yesBtn.style.margin = '0 12px';
+            yesBtn.style.fontWeight = '600';
+            yesBtn.style.fontSize = '1em';
+            yesBtn.style.cursor = 'pointer';
+            yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            yesBtn.addEventListener('click', function() {
+              // Create overlay for fade-out
+              var overlay = document.createElement('div');
+              overlay.id = 'fade-overlay';
+              overlay.style.position = 'fixed';
+              overlay.style.top = '0';
+              overlay.style.left = '0';
+              overlay.style.width = '100vw';
+              overlay.style.height = '100vh';
+              overlay.style.background = '#4E80A0';
+              overlay.style.opacity = '0';
+              overlay.style.pointerEvents = 'none';
+              overlay.style.transition = 'opacity 0.48s cubic-bezier(.42,1.7,.62,1)';
+              overlay.style.zIndex = '10000';
+              document.body.appendChild(overlay);
 
-      // Dismiss button
-      var dismissBtn = document.createElement('button');
-      dismissBtn.textContent = 'Maybe Later';
-      dismissBtn.style.background = '#d45a5a';
-      dismissBtn.style.color = '#fff';
-      dismissBtn.style.border = 'none';
-      dismissBtn.style.borderRadius = '8px';
-      dismissBtn.style.padding = '10px 28px';
-      dismissBtn.style.fontWeight = '600';
-      dismissBtn.style.fontSize = '1em';
-      dismissBtn.style.cursor = 'pointer';
-      dismissBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-      dismissBtn.style.margin = '0 12px';
+              // Animate overlay in
+              setTimeout(function() {
+                overlay.style.opacity = '1';
+              }, 10);
 
-      dismissBtn.addEventListener('click', function() {
-        modal.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
-        modal.addEventListener('animationend', function handler() {
-          document.body.removeChild(modal);
-          modal.removeEventListener('animationend', handler);
-        });
-      });
+              // After fade, redirect
+              setTimeout(function() {
+                window.location.href = logoutLink.getAttribute('href');
+              }, 500);
+            });
 
-      // Add keyframes for pop-out animation if not already present
-      var style = document.createElement('style');
-      style.innerHTML = `
-        @keyframes popOutModalBox {
-          0% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(0.7); opacity: 0; }
+            var noBtn = document.createElement('button');
+            noBtn.textContent = 'No';
+            noBtn.style.background = '#7ec4cf';
+            noBtn.style.color = '#fff';
+            noBtn.style.border = 'none';
+            noBtn.style.borderRadius = '8px';
+            noBtn.style.padding = '10px 28px';
+            noBtn.style.margin = '0 12px';
+            noBtn.style.fontWeight = '600';
+            noBtn.style.fontSize = '1em';
+            noBtn.style.cursor = 'pointer';
+            noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            noBtn.addEventListener('click', function() {
+              // Pop-out animation
+              box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+              box.addEventListener('animationend', function handler() {
+                document.body.removeChild(modal);
+                box.removeEventListener('animationend', handler);
+              });
+            });
+
+            box.appendChild(yesBtn);
+            box.appendChild(noBtn);
+            modal.appendChild(box);
+            document.body.appendChild(modal);
+          });
         }
-      `;
-      document.head.appendChild(style);
+      });
+    </script>
+    <script th:inline="javascript">
+      // Show profile setup popup if needed
+      window.addEventListener('DOMContentLoaded', function() {
+        var needsProfileSetup = /*[[${user.firstName == null or #strings.isEmpty(user.firstName)
+          or user.lastName == null or #strings.isEmpty(user.lastName)
+          or user.middleName == null or #strings.isEmpty(user.middleName)
+          or user.phoneNumber == null or #strings.isEmpty(user.phoneNumber)
+          or user.email == null or #strings.isEmpty(user.email)
+          or user.gender == null or #strings.isEmpty(user.gender)
+          or user.birthday == null
+          or user.bloodType == null or #strings.isEmpty(user.bloodType)
+          or user.emergencyContact == null or #strings.isEmpty(user.emergencyContact)
+          or user.imageUrl == null or #strings.isEmpty(user.imageUrl)}]]*/ false;
 
-      // Button container
-      var btnContainer = document.createElement('div');
-      btnContainer.style.display = 'flex';
-      btnContainer.style.justifyContent = 'center';
-      btnContainer.style.gap = '16px';
-      btnContainer.style.marginTop = '8px';
-      btnContainer.appendChild(editBtn);
-      btnContainer.appendChild(dismissBtn);
+        if (needsProfileSetup) {
+          // Create modal overlay
+          var modal = document.createElement('div');
+          modal.style.position = 'fixed';
+          modal.style.top = '0';
+          modal.style.left = '0';
+          modal.style.width = '100vw';
+          modal.style.height = '100vh';
+          modal.style.background = 'rgba(0,0,0,0.25)';
+          modal.style.display = 'flex';
+          modal.style.alignItems = 'center';
+          modal.style.justifyContent = 'center';
+          modal.style.zIndex = '10001';
 
-      box.appendChild(btnContainer);
-      modal.appendChild(box);
-      document.body.appendChild(modal);
-    }
-  });
-</script>
+          // Modal box
+          var box = document.createElement('div');
+          box.style.background = '#fff';
+          box.style.padding = '32px 24px';
+          box.style.borderRadius = '12px';
+          box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+          box.style.textAlign = 'center';
+          box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+          box.style.maxWidth = '90vw';
+          box.style.minWidth = '320px';
+          box.innerHTML = `
+            <div style="font-size:1.1em; margin-bottom:24px;">
+              <b>Complete your profile!</b><br>
+              It looks like you haven't set up your profile yet.<br>
+              You can set it up now:
+            </div>
+          `;
+
+          // Edit Profile button
+          var editBtn = document.createElement('a');
+          editBtn.href = '/profile/edit';
+          editBtn.textContent = 'Set Up Profile';
+          editBtn.style.background = '#377dff';
+          editBtn.style.color = '#fff';
+          editBtn.style.border = 'none';
+          editBtn.style.borderRadius = '8px';
+          editBtn.style.padding = '10px 28px';
+          editBtn.style.fontWeight = '600';
+          editBtn.style.fontSize = '1em';
+          editBtn.style.cursor = 'pointer';
+          editBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+          editBtn.style.textDecoration = 'none';
+          editBtn.style.margin = '0 12px';
+
+          // Dismiss button
+          var dismissBtn = document.createElement('button');
+          dismissBtn.textContent = 'Maybe Later';
+          dismissBtn.style.background = '#d45a5a';
+          dismissBtn.style.color = '#fff';
+          dismissBtn.style.border = 'none';
+          dismissBtn.style.borderRadius = '8px';
+          dismissBtn.style.padding = '10px 28px';
+          dismissBtn.style.fontWeight = '600';
+          dismissBtn.style.fontSize = '1em';
+          dismissBtn.style.cursor = 'pointer';
+          dismissBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+          dismissBtn.style.margin = '0 12px';
+
+          dismissBtn.addEventListener('click', function() {
+            modal.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+            modal.addEventListener('animationend', function handler() {
+              document.body.removeChild(modal);
+              modal.removeEventListener('animationend', handler);
+            });
+          });
+
+          // Add keyframes for pop-out animation if not already present
+          var style = document.createElement('style');
+          style.innerHTML = `
+            @keyframes popOutModalBox {
+              0% { transform: scale(1); opacity: 1; }
+              100% { transform: scale(0.7); opacity: 0; }
+            }
+          `;
+          document.head.appendChild(style);
+
+          // Button container
+          var btnContainer = document.createElement('div');
+          btnContainer.style.display = 'flex';
+          btnContainer.style.justifyContent = 'center';
+          btnContainer.style.gap = '16px';
+          btnContainer.style.marginTop = '8px';
+          btnContainer.appendChild(editBtn);
+          btnContainer.appendChild(dismissBtn);
+
+          box.appendChild(btnContainer);
+          modal.appendChild(box);
+          document.body.appendChild(modal);
+        }
+      });
+    </script>
+  </div>
+  <!-- About Us Footer -->
+  <footer style="background:#f7fafc; color:#2a4a6a; padding:32px 0 18px 0; font-family:'Poppins','Segoe UI',Arial,sans-serif; margin-top:48px; border-top:1px solid #e3e3e3;">
+    <div style="max-width:1100px; margin:auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:24px;">
+      <!-- About CareNet LEFT -->
+      <div style="flex:1 1 320px; min-width:260px; text-align:left;">
+        <h3 style="margin-bottom:10px; font-weight:600; font-size:1.2em;">About CareNet</h3>
+        <p style="margin:0 0 10px 0; max-width:340px; font-size:1em; color:#444;">
+          CareNet is dedicated to providing patients with a seamless healthcare experience. Book appointments, manage your profile, and access your assessments—all in one secure platform.
+        </p>
+        <div style="margin-top:12px; font-size:0.95em; color:#888;">
+          &copy; 2025 CareNet. All rights reserved.
+        </div>
+      </div>
+      <!-- Doctor Info CENTER -->
+      <div style="flex:1 1 320px; min-width:260px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div style="display:flex;align-items:center;gap:18px;">
+          <img src="https://i.imgur.com/a4NN143.jpeg" alt="Doctor Profile" width="68" height="68" style="border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(68,198,218,0.12);">
+          <div style="text-align:left;">
+            <div style="font-weight:600;font-size:1.12em;color:#377dff;">Dr. Eric C. Yapjuangco</div>
+            <div style="color:#444;font-size:1em;">General Practitioner</div>
+            <div style="color:#7ec4cf;font-size:0.98em;font-style:italic;">“Committed to your well-being and a healthier tomorrow.”</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

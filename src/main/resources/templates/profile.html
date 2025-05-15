@@ -6,13 +6,25 @@
     <!-- Add Poppins font for consistency -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             background: linear-gradient(135deg, #e3f0ff 0%, #44c6da 100%);
             background-repeat: no-repeat;
             background-attachment: fixed;
             font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        }
+        .page-content {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
         }
         .navbar {
             display: flex;
@@ -167,6 +179,16 @@
           transition: opacity 0.48s cubic-bezier(.42,1.7,.62,1);
           z-index: 10000;
         }
+        footer {
+            margin-top: auto !important;
+            flex-shrink: 0;
+            background:#f7fafc;
+            color:#2a4a6a;
+            padding:32px 0 18px 0;
+            text-align:center;
+            font-family:'Poppins','Segoe UI',Arial,sans-serif;
+            border-top:1px solid #e3e3e3;
+        }
         @media (max-width: 600px) {
             .profile-container {
                 margin: 20px 4px;
@@ -185,11 +207,11 @@
     </style>
 </head>
 <body>
+<div class="page-content">
 <!-- Navigation Bar -->
 <div class="navbar">
-  <img src="https://media.discordapp.net/attachments/1370382300906524692/1371534070458089613/CN_Logo_Final.png?ex=68237c24&is=68222aa4&hm=412eb36db0f19dc44f4185975b98c358c1dafa511a7b03a140200353aee3281b&=&format=webp&quality=lossless&width=568&height=169"
+  <img src="https://i.imgur.com/xXwt1l2.png"
        alt="CareNet Logo"
-       class="brand-logo" 
        style="height:48px; width:auto; object-fit:contain; margin-right:18px;">
   <div class="nav-links">
     <a href="/patientHome">Home</a>
@@ -233,120 +255,131 @@
         </ul>
         <div class="profile-actions">
             <a href="/profile/edit">Edit Profile</a>
-            <a href="/logout" class="logout" id="logout-link">Logout</a>
             <a href="/patientHome" class="back">Back</a>
         </div>
     </div>
     <div id="fade-overlay"></div>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var logoutLink = document.getElementById('logout-link');
-    if (logoutLink) {
-      logoutLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        // Create custom modal
-        var modal = document.createElement('div');
-        modal.style.position = 'fixed';
-        modal.style.top = '0';
-        modal.style.left = '0';
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.25)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = '9999';
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+          logoutLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            // Create custom modal
+            var modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.25)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = '9999';
 
-        var style = document.createElement('style');
-        style.innerHTML = `
-          @keyframes popInModalBox {
-            0% { transform: scale(0.7); opacity: 0; }
-            80% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-          @keyframes popOutModalBox {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0.7); opacity: 0; }
-          }
-        `;
-        document.head.appendChild(style);
+            var style = document.createElement('style');
+            style.innerHTML = `
+              @keyframes popInModalBox {
+                0% { transform: scale(0.7); opacity: 0; }
+                80% { transform: scale(1.05); opacity: 1; }
+                100% { transform: scale(1); opacity: 1; }
+              }
+              @keyframes popOutModalBox {
+                0% { transform: scale(1); opacity: 1; }
+                100% { transform: scale(0.7); opacity: 0; }
+              }
+            `;
+            document.head.appendChild(style);
 
-        var box = document.createElement('div');
-        box.style.background = '#fff';
-        box.style.padding = '32px 24px';
-        box.style.borderRadius = '12px';
-        box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
-        box.style.textAlign = 'center';
-        box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
-        box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
+            var box = document.createElement('div');
+            box.style.background = '#fff';
+            box.style.padding = '32px 24px';
+            box.style.borderRadius = '12px';
+            box.style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)';
+            box.style.textAlign = 'center';
+            box.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            box.style.animation = 'popInModalBox 0.32s cubic-bezier(.42,1.7,.62,1)';
+            box.innerHTML = '<div style="font-size:1.1em; margin-bottom:24px;">Are you sure you want to logout?</div>';
 
-        var yesBtn = document.createElement('button');
-        yesBtn.textContent = 'Yes';
-        yesBtn.style.background = '#d45a5a';
-        yesBtn.style.color = '#fff';
-        yesBtn.style.border = 'none';
-        yesBtn.style.borderRadius = '8px';
-        yesBtn.style.padding = '10px 28px';
-        yesBtn.style.margin = '0 12px';
-        yesBtn.style.fontWeight = '600';
-        yesBtn.style.fontSize = '1em';
-        yesBtn.style.cursor = 'pointer';
-        yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        yesBtn.addEventListener('click', function() {
-          var overlay = document.getElementById('fade-overlay');
-          overlay.style.pointerEvents = 'auto';
-          overlay.style.opacity = '1';
-          setTimeout(function() {
-            window.location.href = logoutLink.getAttribute('href');
-          }, 500);
-        });
+            var yesBtn = document.createElement('button');
+            yesBtn.textContent = 'Yes';
+            yesBtn.style.background = '#d45a5a';
+            yesBtn.style.color = '#fff';
+            yesBtn.style.border = 'none';
+            yesBtn.style.borderRadius = '8px';
+            yesBtn.style.padding = '10px 28px';
+            yesBtn.style.margin = '0 12px';
+            yesBtn.style.fontWeight = '600';
+            yesBtn.style.fontSize = '1em';
+            yesBtn.style.cursor = 'pointer';
+            yesBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            yesBtn.addEventListener('click', function() {
+              var overlay = document.getElementById('fade-overlay');
+              overlay.style.pointerEvents = 'auto';
+              overlay.style.opacity = '1';
+              setTimeout(function() {
+                window.location.href = logoutLink.getAttribute('href');
+              }, 500);
+            });
 
-        var noBtn = document.createElement('button');
-        noBtn.textContent = 'No';
-        noBtn.style.background = '#7ec4cf';
-        noBtn.style.color = '#fff';
-        noBtn.style.border = 'none';
-        noBtn.style.borderRadius = '8px';
-        noBtn.style.padding = '10px 28px';
-        noBtn.style.margin = '0 12px';
-        noBtn.style.fontWeight = '600';
-        noBtn.style.fontSize = '1em';
-        noBtn.style.cursor = 'pointer';
-        noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
-        noBtn.addEventListener('click', function() {
-          box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
-          box.addEventListener('animationend', function handler() {
-            document.body.removeChild(modal);
-            box.removeEventListener('animationend', handler);
+            var noBtn = document.createElement('button');
+            noBtn.textContent = 'No';
+            noBtn.style.background = '#7ec4cf';
+            noBtn.style.color = '#fff';
+            noBtn.style.border = 'none';
+            noBtn.style.borderRadius = '8px';
+            noBtn.style.padding = '10px 28px';
+            noBtn.style.margin = '0 12px';
+            noBtn.style.fontWeight = '600';
+            noBtn.style.fontSize = '1em';
+            noBtn.style.cursor = 'pointer';
+            noBtn.style.fontFamily = "'Poppins', 'Segoe UI', Arial, sans-serif";
+            noBtn.addEventListener('click', function() {
+              box.style.animation = 'popOutModalBox 0.22s cubic-bezier(.42,1.7,.62,1)';
+              box.addEventListener('animationend', function handler() {
+                document.body.removeChild(modal);
+                box.removeEventListener('animationend', handler);
+              });
+            });
+
+            box.appendChild(yesBtn);
+            box.appendChild(noBtn);
+            modal.appendChild(box);
+            document.body.appendChild(modal);
+          });
+        }
+
+        // Fade in on page load
+        setTimeout(function() {
+          document.getElementById('fade-overlay').style.opacity = '0';
+        }, 80);
+
+        // Fade out on navigation for main nav links (except logout)
+        document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var overlay = document.getElementById('fade-overlay');
+            overlay.style.pointerEvents = 'auto';
+            overlay.style.opacity = '1';
+            setTimeout(function() {
+              window.location.href = link.getAttribute('href');
+            }, 480);
           });
         });
-
-        box.appendChild(yesBtn);
-        box.appendChild(noBtn);
-        modal.appendChild(box);
-        document.body.appendChild(modal);
       });
-    }
-
-    // Fade in on page load
-    setTimeout(function() {
-      document.getElementById('fade-overlay').style.opacity = '0';
-    }, 80);
-
-    // Fade out on navigation for main nav links (except logout)
-    document.querySelectorAll('.nav-links a:not(.logout-link)').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        var overlay = document.getElementById('fade-overlay');
-        overlay.style.pointerEvents = 'auto';
-        overlay.style.opacity = '1';
-        setTimeout(function() {
-          window.location.href = link.getAttribute('href');
-        }, 480);
-      });
-    });
-  });
-</script>
+    </script>
+</div>
+<footer>
+  <div style="max-width:900px; margin:auto;">
+    <h3 style="margin-bottom:10px; font-weight:600; font-size:1.2em;">About CareNet</h3>
+    <p style="margin:0 auto 10px auto; max-width:600px; font-size:1em; color:#444;">
+      CareNet is dedicated to providing patients with a seamless healthcare experience. Book appointments, manage your profile, and access your assessments—all in one secure platform.
+    </p>
+    <div style="margin-top:12px; font-size:0.95em; color:#888;">
+      &copy; 2025 CareNet. All rights reserved.
+    </div>
+  </div>
+</footer>
 </body>
 </html>
