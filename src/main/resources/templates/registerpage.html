@@ -268,8 +268,9 @@
                 </div>
                 <div class="input-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" th:field="*{username}" required />
+                    <input type="text" id="username" th:field="*{username}" placeholder="Last Name, First Name. M.I." required />
                     <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+
                 </div>
                 <!-- Row 3 -->
                 <div class="input-group">
